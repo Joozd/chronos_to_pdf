@@ -1,12 +1,20 @@
 package utils.extensions
 
+import data.SessionData
 import global.Values
 import io.javalin.http.Context
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 
-fun Context.sessionID(): String = req().session.id
+/**
+ * Gets the sessionData object for this session. If none exists, it will be created.
+ */
+fun Context.getSessionData(): SessionData = synchronized(this) {
+    sessionAttribute(Values.SESSION_DATA) ?: SessionData().also {
+        sessionAttribute(Values.SESSION_DATA, it)
+    }
+}
 
 private val Context.coroutineContext get() = sessionAttribute<Job?>(Values.COROUTINE_JOB)
 
