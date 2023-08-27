@@ -1,5 +1,6 @@
 package httphandlers
 
+import data.LoginDataRepository
 import global.Values
 import io.javalin.http.Context
 import io.javalin.http.Handler
@@ -11,6 +12,8 @@ class EmailHandler: Handler {
     override fun handle(ctx: Context) {
         with(ctx) {
             println("Email received: ${formParam(Values.EMAIL)}")
+            val newLoginData = LoginDataRepository.generateUser()
+            TODO("Send email with login data")
             redirect("/confirmation.html")
         }
     }
