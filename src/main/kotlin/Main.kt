@@ -1,31 +1,19 @@
-import global.Values
-import handlers.PostHandler
+import httphandlers.*
 import io.javalin.Javalin
-import utils.TemporaryResultObject
-import utils.badData
-import utils.generateSessionID
-import java.nio.file.Files
-import java.nio.file.Paths
+import org.jetbrains.exposed.sql.Database
 
-private val temporaryResults = HashMap<String, TemporaryResultObject>()
 fun main() {
-    Javalin.create(/*config*/)
-        .get("/chronos") { ctx ->
-            val path = Paths.get("html/index.html")
-            ctx.generateSessionID(temporaryResults.keys)
+    // connect Database
+    Database.connect("jdbc:h2:./database", driver = "org.h2.Driver")
 
-            // Ensure the file exists
-            if (Files.exists(path)) {
-                ctx.contentType("text/html")
-                ctx.result(Files.readString(path))
-            } else {
-                ctx.status(404).result("File not found!")
-            }
-        }
-        .get("/result/") { ctx ->
-            val sessionID = ctx.sessionAttribute<String>(Values.SESSION_ID) ?: return@get ctx.badData().also { println("BAD BAD DATA :(")}
-            ctx.result("Result: " + (temporaryResults[sessionID]?.result ?: "Bad Session ID $sessionID"))
-        }
-        .post("/chronos/", PostHandler(temporaryResults))
+    Javalin.create { config ->
+        config.staticFiles.add("/public")
+        config.jetty.sessionHandler{ createCoroutineSessionHandler() }
+    }
+        .get("/", MainHandler())
+        .get("/status", StatusHandler())
+        .get("/download", DownloadHandler())
+        .post("/send_email", EmailHandler())
+        .post("/upload", UploadHandler())
         .start(7070)
 }

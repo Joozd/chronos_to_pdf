@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Email Entry for Login Link</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="script.js" defer></script>
+</head>
+<body>
+<form action="/send_email" method="post" onsubmit="return validateEmail();">
+    <h2>Enter your email</h2>
+    <input type="email" id="email" name="email" placeholder="Enter your @klm.com email" required>
+    <button type="submit">Send Email</button>
+    <p id="error-message"></p>
+</form>
+</body>
+</html>

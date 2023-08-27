@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<body>
+<p>Please wait while we process your file...</p>
+<script>
+    let sessionId = ""; // Will be populated dynamically
+
+    // JavaScript to poll server for processing status
+    function checkStatus() {
+        fetch(`/status?sessionId=${sessionId}`)
+            .then(response => response.json())
+            .then(data => {
+                if (data.done) {
+                    window.location.href = "/download";
+                }
+            });
+    }
+
+    // This function initializes the polling with the provided sessionId
+    function initializePolling() {
+        setInterval(checkStatus, 2000); // poll every 2 seconds
+    }
+    initializePolling()
+</script>
+</body>
+</html>

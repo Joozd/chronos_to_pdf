@@ -1,0 +1,111 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f7f9fc;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+}
+
+form {
+    background-color: #ffffff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    max-width: 400px;
+    width: 100%;
+}
+
+h2 {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+input {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 15px;
+    border: 1px solid #d1d1d1;
+    border-radius: 4px;
+    font-size: 16px;
+}
+
+button {
+    width: 100%;
+    padding: 10px;
+    background-color: #007bff;
+    color: #ffffff;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+button:hover {
+    background-color: #0056b3;
+}
+
+.confirmation-container {
+    background-color: #ffffff;
+    padding: 30px 20px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    max-width: 450px;
+    width: 90%; /* Ensuring mobile responsiveness */
+    text-align: center;
+}
+
+h2 {
+    margin-bottom: 20px;
+}
+
+p {
+    margin-bottom: 15px;
+    font-size: 16px;
+    line-height: 1.5;
+}
+.error-container {
+    background-color: #ffffff;
+    padding: 30px 20px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    max-width: 450px;
+    width: 90%; /* Ensuring mobile responsiveness */
+    text-align: center;
+}
+
+.error-container h2 {
+    color: #d9534f; /* A light red color for error emphasis */
+    margin-bottom: 20px;
+}
+
+.error-container p {
+    margin-bottom: 15px;
+    font-size: 16px;
+    line-height: 1.5;
+}
+.request-button {
+    display: inline-block;
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: #ffffff;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    text-decoration: none; /* This is to remove the underline from the anchor link */
+    font-size: 16px;
+    margin-top: 10px;
+    transition: background-color 0.3s ease; /* Smooth transition for hover effect */
+}
+
+.request-button:hover {
+    background-color: #0056b3;
+}
+
+#error-message {
+    color: red;
+    font-size: 14px;
+    margin-top: 10px;
+}
