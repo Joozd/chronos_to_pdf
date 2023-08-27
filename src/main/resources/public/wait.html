@@ -3,11 +3,9 @@
 <body>
 <p>Please wait while we process your file...</p>
 <script>
-    let sessionId = ""; // Will be populated dynamically
-
     // JavaScript to poll server for processing status
     function checkStatus() {
-        fetch(`/status?sessionId=${sessionId}`)
+        fetch(`/status`)
             .then(response => response.json())
             .then(data => {
                 if (data.done) {
