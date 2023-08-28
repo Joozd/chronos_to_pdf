@@ -1,0 +1,5 @@
+package email
+
+class Mailer {
+
+}

@@ -15,6 +15,9 @@ class EmailHandler: Handler {
             val newLoginData = LoginDataRepository.generateUser()
             TODO("Send email with login data")
             redirect("/confirmation.html")
+            javaClass.getResourceAsStream("/.conf")?.bufferedReader()?.useLines { lines -> // get email password. This does not go here of course but in email repository
+                lines.forEach { println(it) }
+            }
         }
     }
 }
