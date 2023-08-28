@@ -1,12 +1,15 @@
+import data.FlightsDataRepository
 import data.LoginDataRepository
 import data.flightsdata.EncryptedUserDataTable
 import data.logindata.Users
 import data.security.Encryption
+import helpers.generateFlights
 import org.jetbrains.exposed.sql.Database
 import org.jetbrains.exposed.sql.SchemaUtils
 import org.jetbrains.exposed.sql.deleteAll
 import org.jetbrains.exposed.sql.transactions.transaction
 import org.junit.jupiter.api.*
+import kotlin.test.assertEquals
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class DBTests {
@@ -23,7 +26,7 @@ class DBTests {
     @BeforeEach
     fun setup() {
         transaction {
-            // Populate tables with test data if needed here
+            // Populate tables with test data if needed here.
         }
     }
 
@@ -37,11 +40,12 @@ class DBTests {
         }
     }
 
-    @Test
+    /**
+     * Test creation, insertion and retrieval(checking) of login data
+     */
+        @Test
     fun testCreateLoginData() {
-        /*
-         * Test creation, insertion and retrieval(checking) of login data
-         */
+
         val loginData = LoginDataRepository.generateUser() // generate user, store in DB
         //check correct data is correct
         assert(LoginDataRepository.checkLoginDataCorrect(loginData.uid, loginData.base64Key))
@@ -50,6 +54,21 @@ class DBTests {
         assert(!LoginDataRepository.checkLoginDataCorrect(loginData.uid, Encryption.generateBase64Key()))
         assert(!LoginDataRepository.checkLoginDataCorrect(Encryption.generateUserName(), loginData.base64Key))
     }
-
     // Add other tests as needed
+
+    /**
+     * Test insertion and retrieval of flight data in encrypted DB
+     */
+    @Test
+    fun testInsertRetrieveFlights(){
+        val flights = generateFlights(2)
+        val testUser = LoginDataRepository.generateUser()
+        println(flights)
+
+        // test inserting flights:
+        FlightsDataRepository.insertDataForUser(testUser, flights)
+        val retrievedFlights = FlightsDataRepository.getDataForUser(testUser)
+
+        assertEquals(flights, retrievedFlights)
+    }
 }
