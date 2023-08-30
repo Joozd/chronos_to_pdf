@@ -47,6 +47,21 @@ object LoginDataRepository {
     private fun checkIfUserExists(uid: String): Boolean = getUserByUsername(uid) != null
 
     /**
+     * Checks if a user exists
+     */
+    fun checkIfEmailUsed(email: String) = checkIfUserExists(emailToUid(email))
+
+
+    /**
+     * UID is just the Base64 encoded hashed and peppered lowercase email address
+     */
+    fun emailToUid(email: String): String {
+        val emailLowercase = email.lowercase() // all lowercase to avoid duplicates when user uses capitals
+        val hash = SecureHasher.hashEmailAddress(emailLowercase)
+        return Base64.getEncoder().encodeToString(hash)
+    }
+
+    /**
      * Generate a username+password combination and stores its salt+hash.
      * TODO: Check if user doesn't exist yet (edge case)
      */

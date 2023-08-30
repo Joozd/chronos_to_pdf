@@ -1,3 +1,4 @@
+import data.Config
 import java.nio.charset.StandardCharsets
 import java.security.MessageDigest
 import java.security.NoSuchAlgorithmException
@@ -26,10 +27,9 @@ object SecureHasher {
      * @throws NoSuchAlgorithmException if the algorithm "SHA-256" is not available.
      */
     fun hashKeyWithSalt(key: ByteArray, username: String, salt: ByteArray): ByteArray {
-        val digest = MessageDigest.getInstance("SHA-256")
         val usernameBytes = username.toByteArray(StandardCharsets.UTF_8)
         val combined = key + usernameBytes + salt
-        return digest.digest(combined)
+        return sha256Hash(combined)
     }
 
     /**
@@ -45,4 +45,19 @@ object SecureHasher {
         val key = Base64.getDecoder().decode(base64Key)
         return hashKeyWithSalt(key, username, salt)
     }
+
+    /**
+     * Hash email address to username. Not secure, only uses pepper.
+     */
+    fun hashEmailAddress(email: String): ByteArray{
+        val combined = email + Config["pepper"]
+        return sha256Hash(combined.toByteArray(Charsets.UTF_8))
+    }
+
+    /**
+     * SHA-256 hash of [bytes]
+     */
+    private fun sha256Hash(bytes: ByteArray): ByteArray=
+        MessageDigest.getInstance("SHA-256").digest(bytes)
+
 }

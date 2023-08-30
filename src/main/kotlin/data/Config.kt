@@ -1,14 +1,16 @@
 package data
 
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
+import kotlinx.coroutines.withContext
 
 /**
- * Create with [Config.getInstance]
- * use as config.getInstance()["password"]
+ * use as Config["password"]
  */
-class Config(configLines: List<String>) {
-    private val values = configLines.mapNotNull { nameToContentFromLine(it) }.toMap()
+object Config {
+    private val values = R.textFile(".conf")?.lines()?.mapNotNull { nameToContentFromLine(it) }?.toMap()
+        ?: emptyMap()
 
     operator fun get(key: String): String? = values[key]
 
@@ -26,17 +28,5 @@ class Config(configLines: List<String>) {
         return name to content
     }
 
-    companion object{
-        private var _instance: Config? = null
-        private val mutex = Mutex()
-        suspend fun getInstance(): Config = mutex.withLock{
-            _instance
-                ?: Config(readConfigFileToLines() ?: error ("ERROR READING CONFIG FILE")).also{
-                    _instance = it
-                }
-        }
 
-        private fun readConfigFileToLines() =
-            Config::class.java.classLoader.getResourceAsStream("/.conf")?.bufferedReader()?.readLines()
-    }
 }

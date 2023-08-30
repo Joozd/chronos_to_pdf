@@ -32,4 +32,9 @@ class SessionData {
      * a Temporary Result Object, for dev and debugging
      */
     var temporaryResultObject: TemporaryResultObject? = null
+
+    /**
+     * Email address for user, for account creation
+     */
+    var emailAddress: String? = null
 }

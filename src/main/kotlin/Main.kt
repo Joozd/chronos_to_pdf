@@ -26,7 +26,9 @@ fun main() {
         .get("/", MainHandler())
         .get("/status", StatusHandler())
         .get("/download", DownloadHandler())
-        .post("/send_email", EmailHandler())
+        .get("/create_new_account", CreateNewAccountHandler())
+
+        .post("check_existing", CheckIfEmailExistsHandler())
         .post("/upload", UploadHandler())
         .start(7070)
 }
