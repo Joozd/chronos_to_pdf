@@ -14,7 +14,7 @@ class ConfigTest {
         val testName3 = "aub"
         val testValue3 = " hah! "
 
-        val testConfig = Config(
+        val testConfig = Config.getMockInstance(
             ("$testName1=\"$testValue1\"" + "\n" +
              "$testName2=\"$testValue2\"" + "\n" +
              "$testName3=\"$testValue3\""
