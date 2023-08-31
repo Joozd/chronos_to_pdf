@@ -15,7 +15,7 @@ class CreateNewAccountHandler: SessionHandler() {
         with(ctx) {
             sessionData.emailAddress?.let { address ->
                 ioScope?.launch {
-                    val newLoginData = LoginDataRepository.generateUser()
+                    val newLoginData = LoginDataRepository.createNewUser(address)
                     Mailer().sendNewUserMail(address, newLoginData)
                 }
                 redirect("/confirmation.html")

@@ -2,16 +2,16 @@ package email
 
 import data.Config
 import data.R
-import data.flightsdata.EncryptedUserData
 import data.logindata.LoginWithKey
 
 class Mailer {
-    suspend fun sendNewUserMail(emailAddress: String, loginWithKey: LoginWithKey){
+    private val config get() = Config.getInstance()
+    fun sendNewUserMail(emailAddress: String, loginWithKey: LoginWithKey){
         EmailSender.sendEmail(
             emailAddress,
             "Chronos to PDF login Link",
             addLinkToTemplate(R.textFile("email_template.html")!!, loginWithKey),
-            Config.getInstance()["password"]!!
+            config["password"]!!
         )
     }
 

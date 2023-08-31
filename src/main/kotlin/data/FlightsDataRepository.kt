@@ -4,8 +4,6 @@ import data.flightsdata.EncryptedUserData
 import data.logindata.LoginWithKey
 import data.security.Encryption
 import nl.joozd.joozdlogcommon.BasicFlight
-import nl.joozd.joozdlogimporter.CsvImporter
-import nl.joozd.joozdlogimporter.supportedFileTypes.CompleteLogbookFile
 import org.jetbrains.exposed.sql.statements.api.ExposedBlob
 import org.jetbrains.exposed.sql.transactions.transaction
 import java.time.Instant
@@ -18,14 +16,23 @@ object FlightsDataRepository {
      * Insert Encrypted Data for user. Overwrites old data that may have been stored.
      * Updates [EncryptedUserData.lastAccessed]
      */
-    private fun insertEncryptedDataForUser(username: String, data: ByteArray) {
+    private fun createOrUpdateEncryptedDataForUser(username: String, data: ByteArray) {
         transaction {
-            EncryptedUserData.new(username) {
-                lastAccessed = Instant.now().epochSecond
-                encryptedData = ExposedBlob(data)
+            // get or create EncryptedUserData
+            val existingUser = EncryptedUserData.findById(username)
+            if (existingUser != null) {
+                existingUser.encryptedData = ExposedBlob(data)
+            }
+            else {
+                EncryptedUserData.new(username) {
+                    lastAccessed = Instant.now().epochSecond
+                    encryptedData = ExposedBlob(data)
+                }
             }
         }
     }
+
+
 
     /**
      * Retrieve Encrypted Data for user. Overwrites old data that may have been stored.
@@ -44,9 +51,9 @@ object FlightsDataRepository {
      * Inserts data for user. Note that FlightID is not used and will always be -1.
      */
     fun insertDataForUser(username: String, base64Key: String, flights: Collection<BasicFlight>){
-        val csv = BasicFlight.CSV_IDENTIFIER_STRING + "\n" + flights.joinToString("\n") { it.toCsv() }
+        val csv = flights.joinToString("\n") { it.toCsv() }
         val encryptedCSV = Encryption.encryptData(csv, base64Key)
-        insertEncryptedDataForUser(username, encryptedCSV)
+        createOrUpdateEncryptedDataForUser(username, encryptedCSV)
     }
 
     fun insertDataForUser(loginWithKey: LoginWithKey, flights: Collection<BasicFlight>) =
@@ -55,13 +62,20 @@ object FlightsDataRepository {
     /**
      * Gets data for user. Note that FlightID is not used and will always be -1.
      */
-    fun getDataForUser(username: String, base64Key: String): Collection<BasicFlight>?{
+    fun getDataForUser(username: String, base64Key: String): Collection<BasicFlight>? {
         val encryptedUserData = getEncryptedDataForUser(username) ?: return null
         val decryptedData = Encryption.decryptDataToString(encryptedUserData, base64Key) ?: return null
-        val file = CsvImporter(decryptedData.lines()).getFile() as? CompleteLogbookFile ?: return null
-        return file.extractCompletedFlights().flights
+        println("DECRYPTEDDATA: $decryptedData")
+
+        //parse decrypted csv lines to flights and return them
+        return decryptedData.lines().filter { it.isNotBlank() }.map { BasicFlight.ofCsv(it) }
     }
 
     fun getDataForUser(loginWithKey: LoginWithKey) =
         getDataForUser(loginWithKey.uid, loginWithKey.base64Key)
+
+    /**
+     * Create new entry for user. Removes old data for that user.
+     */
+    fun createNewDataForUser(loginWithKey: LoginWithKey) = insertDataForUser(loginWithKey, emptyList())
 }

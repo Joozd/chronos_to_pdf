@@ -3,48 +3,20 @@ package data
 import SecureHasher
 import data.logindata.LoginData
 import data.logindata.LoginWithKey
-import data.logindata.Users
+import data.logindata.User
 import data.security.Encryption
-import org.jetbrains.exposed.sql.insert
-import org.jetbrains.exposed.sql.select
 import org.jetbrains.exposed.sql.transactions.transaction
 import java.util.*
 
 object LoginDataRepository {
-    private fun insertUser(user: LoginData) {
-        transaction {
-            Users.insert {
-                it[username] = user.username
-                it[salt] = user.salt
-                it[hash] = user.hash
-            }
-        }
-    }
-
-    fun getUserByUsername(username: String): LoginData? {
-        return transaction {
-            Users.select { Users.username eq username }
-                .singleOrNull()
-                ?.let {
-                    LoginData(
-                        it[Users.username],
-                        it[Users.salt],
-                        it[Users.hash]
-                    )
-                }
-        }
-    }
-
+    /**
+     * Checks if login data for a combination of [uid] and [base64key] is correct.
+     */
     fun checkLoginDataCorrect(uid: String, base64key: String): Boolean{
         val user = getUserByUsername(uid) ?: return false
         // check if the stored hash is the same as calculated hash
         return SecureHasher.hashKeyWithSalt(base64key, uid, user.salt).contentEquals(user.hash)
     }
-
-    /**
-     * Check if a username already exists
-     */
-    private fun checkIfUserExists(uid: String): Boolean = getUserByUsername(uid) != null
 
     /**
      * Checks if a user exists
@@ -55,7 +27,7 @@ object LoginDataRepository {
     /**
      * UID is just the Base64 encoded hashed and peppered lowercase email address
      */
-    fun emailToUid(email: String): String {
+    private fun emailToUid(email: String): String {
         val emailLowercase = email.lowercase() // all lowercase to avoid duplicates when user uses capitals
         val hash = SecureHasher.hashEmailAddress(emailLowercase)
         return Base64.getEncoder().encodeToString(hash)
@@ -63,24 +35,60 @@ object LoginDataRepository {
 
     /**
      * Generate a username+password combination and stores its salt+hash.
-     * TODO: Check if user doesn't exist yet (edge case)
+     * If a user already exists, it overwrites that user's data.
      */
-    fun generateUser(): LoginWithKey{
+    fun createNewUser(emailAddress: String): LoginWithKey{
         // Generate a unique username
-        var userName: String
-        do
-            userName = Encryption.generateUserName()
-        while(checkIfUserExists(userName))
+        val uid = emailToUid(emailAddress)
 
         val key = Encryption.generateSecureRandomData()
-        val salt = Encryption.generateSecureRandomData(16)
+        val salt = SecureHasher.generateSalt()
 
-        val hash = SecureHasher.hashKeyWithSalt(key, userName, salt)
+        val hash = SecureHasher.hashKeyWithSalt(key, uid, salt)
 
         val base64key = Base64.getEncoder().encodeToString(key)
 
-        insertUser(LoginData(userName, salt, hash))
+        insertUser(LoginData(uid, salt, hash))
+        FlightsDataRepository.createNewDataForUser(LoginWithKey(uid, base64key)) // using base64key, so we can just use the same function in FlightsDataRepository
 
-        return LoginWithKey(userName, base64key)
+        return LoginWithKey(uid, base64key)
     }
+
+
+    /**
+     * Check if a username already exists
+     */
+    private fun checkIfUserExists(uid: String): Boolean = getUserByUsername(uid) != null
+
+    /**
+     * Insert a new user. Overwrites existing user.
+     */
+    private fun insertUser(user: LoginData) {
+        transaction {
+            val existingUser = User.findById(user.username)
+            if (existingUser != null){
+                existingUser.salt = user.salt
+                existingUser.hash = user.hash
+            }
+            else {
+                User.new(user.username) {
+                    salt = user.salt
+                    hash = user.hash
+                }
+            }
+        }
+    }
+
+    /**
+     * Gets a user's name, salt and hash in a [LoginData] instance
+     */
+    private fun getUserByUsername(username: String): LoginData? {
+        return transaction {
+            User.findById(username)?.toLoginData()
+        }
+    }
+
+
+
+
 }

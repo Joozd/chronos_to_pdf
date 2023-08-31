@@ -12,7 +12,7 @@ import javax.crypto.spec.SecretKeySpec
 import kotlin.math.absoluteValue
 
 object Encryption {
-    private val  logger = LoggerFactory.getLogger(this::class.java)
+    private val logger = LoggerFactory.getLogger(this::class.java)
     /**
      * Encrypts the given data using the Base64 encoded key.
      *
@@ -54,7 +54,7 @@ object Encryption {
     /**
      * Decrypts the given encrypted data using the Base64 encoded key.
      *
-     * @param encryptedData The encrypted data as ByteArray.
+     * @param encryptedDataWithIv The encrypted data as ByteArray.
      * @param base64Key The Base64 encoded key for decryption.
      * @return The decrypted data.
      */
@@ -93,7 +93,7 @@ object Encryption {
     /**
      * Decrypts the given encrypted data using the Base64 encoded key.
      *
-     * @param encryptedData The encrypted data as ByteArray.
+     * @param encryptedDataWithIv The encrypted data as ByteArray.
      * @param base64Key The Base64 encoded key for decryption.
      * @return The decrypted data.
      */
@@ -102,7 +102,7 @@ object Encryption {
 
     /**
      * Generates a 256-bit key
-     * @param keySizeBytes The size of the key, in bytes. Default 32 (256 bits)
+     * @param sizeBytes The size of the key, in bytes. Default 32 (256 bits)
      */
     fun generateSecureRandomData(sizeBytes: Int = 32) =
         ByteArray(sizeBytes).apply{

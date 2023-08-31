@@ -6,6 +6,8 @@ import java.security.SecureRandom
 import java.util.Base64
 
 object SecureHasher {
+    //shortcut for cleaner coded
+    private val config get() = Config.getInstance()
 
     /**
      * Generate a random salt using SecureRandom.
@@ -50,7 +52,7 @@ object SecureHasher {
      * Hash email address to username. Not secure, only uses pepper.
      */
     fun hashEmailAddress(email: String): ByteArray{
-        val combined = email + Config["pepper"]
+        val combined = email + config["pepper"]
         return sha256Hash(combined.toByteArray(Charsets.UTF_8))
     }
 
