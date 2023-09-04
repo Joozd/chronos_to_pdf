@@ -1,6 +1,5 @@
 package httphandlers
 
-import data.LoginDataRepository
 import data.SessionData
 import global.Values
 import io.javalin.http.Context
@@ -19,11 +18,11 @@ class MainHandler: SessionHandler() {
                 redirect("/signup.html")
                 return
             }
-            if(!LoginDataRepository.checkLoginDataCorrect(uid, key))
+            if(!loggedIn(sessionData))
                 redirect("/bad_login_data.html")
 
             else{
-
+                redirect("/upload.html")
             }
         }
     }
