@@ -68,7 +68,6 @@ class DBTests {
     fun testInsertRetrieveFlights(){
         val flights = generateFlights(2)
         val testUser = LoginDataRepository.createNewUser(TEST_EMAIL_ADDRESS)
-        println(flights)
 
         // test inserting flights:
         FlightsDataRepository.insertDataForUser(testUser, flights)
