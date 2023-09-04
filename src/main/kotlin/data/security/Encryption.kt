@@ -1,9 +1,10 @@
 package data.security
 
 import org.slf4j.LoggerFactory
+import utils.base64Decoder
+import utils.base64Encoder
 import java.security.InvalidKeyException
 import java.security.SecureRandom
-import java.util.*
 import javax.crypto.AEADBadTagException
 import javax.crypto.BadPaddingException
 import javax.crypto.Cipher
@@ -23,7 +24,7 @@ object Encryption {
 
     private fun encryptData(data: ByteArray, base64Key: String): ByteArray {
         // 1. Decode the Base64 encoded key
-        val keyBytes = Base64.getDecoder().decode(base64Key)
+        val keyBytes = base64Decoder().decode(base64Key)
         val secretKey = SecretKeySpec(keyBytes, "AES")
 
         // Generate a random IV
@@ -61,7 +62,7 @@ object Encryption {
     fun decryptData(encryptedDataWithIv: ByteArray, base64Key: String): ByteArray? {
         try {
             // 1. Decode the Base64 encoded key
-            val keyBytes = Base64.getDecoder().decode(base64Key)
+            val keyBytes = base64Decoder().decode(base64Key)
             val secretKey = SecretKeySpec(keyBytes, "AES")
 
             // Extract the IV (Initialization Vector) from the start of the encrypted data
@@ -110,7 +111,7 @@ object Encryption {
         }
 
     fun generateBase64Key(sizeBytes: Int = 32) =
-        Base64.getEncoder().encodeToString(generateSecureRandomData(sizeBytes))
+        base64Encoder().encodeToString(generateSecureRandomData(sizeBytes))
 
     fun generateUserName(length: Int = 16): String =
         StringBuilder(length).apply {

@@ -1,9 +1,13 @@
 import data.security.Encryption
 import org.junit.jupiter.api.Test
-import java.util.*
+import org.slf4j.LoggerFactory
+import utils.base64Decoder
+import utils.base64Encoder
 import kotlin.test.assertEquals
 
 object EncryptionTest {
+    private val logger = LoggerFactory.getLogger(this::class.java)
+
     private val testData = "Banaan12345"
     private val testKey = Encryption.generateBase64Key()
     private val wrongKey = Encryption.generateBase64Key()
@@ -11,12 +15,12 @@ object EncryptionTest {
     @Test
     fun test_generateSecureRandomKey(){
         val keySize = 32
-        val key = Base64.getDecoder().decode(testKey)
+        val key = base64Decoder().decode(testKey)
 
         assertEquals(keySize, key.size)
         assert(!ByteArray(keySize).contentEquals(key)) // check testKey is not just an empty 32-byte ByteArray
-        assert(!wrongKey.contentEquals(testKey)) // assert wrongKey is not the same as testkey. This part can fail on average once every 2^256 tests.
-        assertEquals(Base64.getEncoder().encodeToString(key), testKey)
+        assert(!wrongKey!!.contentEquals(testKey)) // assert wrongKey is not the same as testKey. This part can fail on average once every 2^256 tests.
+        assertEquals(base64Encoder().encodeToString(key), testKey)
     }
 
     @Test
@@ -31,8 +35,8 @@ object EncryptionTest {
         assertEquals(testData, Encryption.decryptDataToString(encrypted, testKey))
 
         // Check decrypting with bad key gives null
-        println("The next test might log a Bad Key warning:")
+        logger.info("The next test might log a Bad Key warning:")
         assertEquals(null, Encryption.decryptDataToString(encrypted, wrongKey))
-        println("Test performed. Any logs after this are not from the BAd Key test.")
+        logger.info("Test performed. Any logs after this are not from the BAd Key test.")
     }
 }

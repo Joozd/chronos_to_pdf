@@ -1,9 +1,9 @@
 import data.Config
+import utils.base64Decoder
 import java.nio.charset.StandardCharsets
 import java.security.MessageDigest
 import java.security.NoSuchAlgorithmException
 import java.security.SecureRandom
-import java.util.Base64
 
 object SecureHasher {
     //shortcut for cleaner coded
@@ -44,7 +44,7 @@ object SecureHasher {
      * @throws NoSuchAlgorithmException if the algorithm "SHA-256" is not available.
      */
     fun hashKeyWithSalt(base64Key: String, username: String, salt: ByteArray): ByteArray {
-        val key = Base64.getDecoder().decode(base64Key)
+        val key = base64Decoder().decode(base64Key)
         return hashKeyWithSalt(key, username, salt)
     }
 

@@ -23,6 +23,7 @@ class CreateNewAccountHandler: SessionHandler() {
             }
         }
         // If we get here, user did something wrong. Send him back to start.
+        logger.warn("something went wrong aub / sessionData: $sessionData")
         ctx.redirect("/")
     }
 }

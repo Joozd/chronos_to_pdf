@@ -4,6 +4,9 @@ package data
  * use as Config["password"]
  */
 class Config private constructor (lines: List<String>?) {
+    init{
+        println("TEST: $lines")
+    }
     private val values = lines?.mapNotNull { nameToContentFromLine(it) }?.toMap()
         ?: emptyMap()
 

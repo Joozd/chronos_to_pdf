@@ -1,4 +1,20 @@
+// Wait for the document to be completely loaded
+document.addEventListener("DOMContentLoaded", function() {
+    // Get the form element
+    const form = document.getElementById('emailForm');
+
+    // Attach a submit event to the form
+    form.addEventListener('submit', function(event) {
+        // Prevent the default form submission
+        event.preventDefault();
+
+        // Call your validateEmail function
+        validateEmail(event);
+    });
+});
+
 async function validateEmail() {
+    console.log("SOME TEXT HERE aub")
     const emailInput = document.getElementById('email');
     const errorMsg = document.getElementById('error-message');
 
@@ -7,6 +23,8 @@ async function validateEmail() {
         return false;
     } else {
         errorMsg.textContent = '';
+
+        // AJAX logic:
 
         // Send email address to /check_existing endpoint to check if user already exists
         const response = await fetch('/check_existing', {

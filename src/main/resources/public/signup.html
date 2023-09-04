@@ -5,10 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Email Entry for Login Link</title>
     <link rel="stylesheet" href="styles.css">
-    <script src="script.js" defer></script>
+    <script src="email_submit_script.js" defer></script>
 </head>
 <body>
-<form action="/create_new_account" method="post" onsubmit="return validateEmail();">
+<form id="emailForm">
     <!--
     This form lets user enter their @klm.com email address.
     If the email address is already used, a dialog will be shown

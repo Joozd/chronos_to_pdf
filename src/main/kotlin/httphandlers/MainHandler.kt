@@ -4,7 +4,6 @@ import data.LoginDataRepository
 import data.SessionData
 import global.Values
 import io.javalin.http.Context
-import io.javalin.http.Handler
 
 class MainHandler: SessionHandler() {
     override fun handleWithSessionData(ctx: Context, sessionData: SessionData) {
@@ -22,6 +21,10 @@ class MainHandler: SessionHandler() {
             }
             if(!LoginDataRepository.checkLoginDataCorrect(uid, key))
                 redirect("/bad_login_data.html")
+
+            else{
+
+            }
         }
     }
 }

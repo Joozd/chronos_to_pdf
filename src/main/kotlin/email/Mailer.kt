@@ -10,7 +10,7 @@ class Mailer {
         EmailSender.sendEmail(
             emailAddress,
             "Chronos to PDF login Link",
-            addLinkToTemplate(R.textFile("email_template.html")!!, loginWithKey),
+            addLinkToTemplate(R.textFile("email_template.html") ?: error ("Email template not found!"), loginWithKey),
             config["password"]!!
         )
     }

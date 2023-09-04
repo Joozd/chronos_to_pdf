@@ -6,7 +6,7 @@ import data.logindata.LoginWithKey
 import data.logindata.User
 import data.security.Encryption
 import org.jetbrains.exposed.sql.transactions.transaction
-import java.util.*
+import utils.base64Encoder
 
 object LoginDataRepository {
     /**
@@ -30,7 +30,7 @@ object LoginDataRepository {
     private fun emailToUid(email: String): String {
         val emailLowercase = email.lowercase() // all lowercase to avoid duplicates when user uses capitals
         val hash = SecureHasher.hashEmailAddress(emailLowercase)
-        return Base64.getEncoder().encodeToString(hash)
+        return base64Encoder().encodeToString(hash)
     }
 
     /**
@@ -46,7 +46,7 @@ object LoginDataRepository {
 
         val hash = SecureHasher.hashKeyWithSalt(key, uid, salt)
 
-        val base64key = Base64.getEncoder().encodeToString(key)
+        val base64key = base64Encoder().encodeToString(key)
 
         insertUser(LoginData(uid, salt, hash))
         FlightsDataRepository.createNewDataForUser(LoginWithKey(uid, base64key)) // using base64key, so we can just use the same function in FlightsDataRepository
