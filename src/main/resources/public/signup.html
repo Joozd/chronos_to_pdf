@@ -8,9 +8,16 @@
     <script src="script.js" defer></script>
 </head>
 <body>
-<form action="/send_email" method="post" onsubmit="return validateEmail();">
+<form action="/create_new_account" method="post" onsubmit="return validateEmail();">
+    <!--
+    This form lets user enter their @klm.com email address.
+    If the email address is already used, a dialog will be shown
+    asking the user if they want to overwrite their data.
+    If the address is not new, or the user wants to overwrite their data,
+    a new account will be made and login data will be mailed to user.
+    -->
     <h2>Enter your email</h2>
-    <input type="email" id="email" name="email" placeholder="Enter your @klm.com email" required>
+    <label for="email"></label><input type="email" id="email" name="email" placeholder="Enter your @klm.com email" required>
     <button type="submit">Send Email</button>
     <p id="error-message"></p>
 </form>
