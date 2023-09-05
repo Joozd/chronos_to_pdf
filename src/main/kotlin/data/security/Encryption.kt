@@ -10,7 +10,6 @@ import javax.crypto.BadPaddingException
 import javax.crypto.Cipher
 import javax.crypto.spec.GCMParameterSpec
 import javax.crypto.spec.SecretKeySpec
-import kotlin.math.absoluteValue
 
 object Encryption {
     private val logger = LoggerFactory.getLogger(this::class.java)
@@ -110,17 +109,6 @@ object Encryption {
             SecureRandom().nextBytes(this)
         }
 
-    fun generateBase64Key(sizeBytes: Int = 32) =
+    fun generateBase64Key(sizeBytes: Int = 32): String =
         base64Encoder().encodeToString(generateSecureRandomData(sizeBytes))
-
-    fun generateUserName(length: Int = 16): String =
-        StringBuilder(length).apply {
-            repeat(length) {
-                append(getRandomChar())
-            }
-        }.toString()
-
-    private fun getRandomChar(): Char =
-        allowedCharacters[SecureRandom().nextInt().absoluteValue % (allowedCharacters.size - 1)]
-    private val allowedCharacters = ('a'..'z') + ( 'A'..'Z') + ('0'..'9')
 }

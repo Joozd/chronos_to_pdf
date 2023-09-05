@@ -57,7 +57,7 @@ class DBTests {
 
         //check incorrect data is incorrect
         assert(!LoginDataRepository.checkLoginDataCorrect(loginData.uid, Encryption.generateBase64Key()))
-        assert(!LoginDataRepository.checkLoginDataCorrect(Encryption.generateUserName(), loginData.base64Key))
+        assert(!LoginDataRepository.checkLoginDataCorrect(TEST_EMAIL_ADDRESS, loginData.base64Key))
     }
     // Add other tests as needed
 

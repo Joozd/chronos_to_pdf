@@ -24,4 +24,6 @@ data class SessionData(
      * Email address for user, for account creation
      */
     var emailAddress: String? = null
-)
+){
+    var downloadableFile: ByteArray? = null
+}

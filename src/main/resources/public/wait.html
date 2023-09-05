@@ -1,24 +1,47 @@
 <!DOCTYPE html>
 <html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>File Processing</title>
+</head>
 <body>
-<p>Please wait while we process your file...</p>
+<p id="status-text">Please wait while we process your file...</p>
+
 <script>
+    let pollingInterval;
+
     // JavaScript to poll server for processing status
     function checkStatus() {
         fetch(`/status`)
-            .then(response => response.json())
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error(`Network response was not ok: ${response.statusText}`);
+                }
+                return response.json();
+            })
             .then(data => {
                 if (data.done) {
+                    clearInterval(pollingInterval);  // stop the polling
                     window.location.href = "/download";
+                } else {
+                    // Update the user about the status
+                    document.getElementById("status-text").textContent = data.message || "Processing...";
                 }
+            })
+            .catch(error => {
+                // Log the error and potentially stop polling
+                console.error("An error occurred:", error);
+                document.getElementById("status-text").textContent = "An error occurred. Please try again.";
             });
     }
 
-    // This function initializes the polling with the provided sessionId
+    // This function initializes the polling
     function initializePolling() {
-        setInterval(checkStatus, 2000); // poll every 2 seconds
+        // poll every 2 seconds
+        pollingInterval = setInterval(checkStatus, 2000);
     }
-    initializePolling()
+
+    initializePolling();
 </script>
 </body>
 </html>

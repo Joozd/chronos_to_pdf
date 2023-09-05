@@ -1,30 +1,28 @@
 package httphandlers
 
-import global.StatusKeeper
-import global.Values
+import data.SessionData
 import io.javalin.http.Context
-import io.javalin.http.Handler
-import nl.joozd.joozdlogcommon.BasicFlight
-import java.io.InputStream
 
 /**
  * This is a handler that provides the built PDF that should be available.
  */
-class DownloadHandler: Handler {
-    override fun handle(ctx: Context) {
+class DownloadHandler: SessionHandler() {
+    override fun handleWithSessionData(ctx: Context, sessionData: SessionData) {
         with (ctx) {
-            val isDone = sessionAttribute<StatusKeeper>(Values.STATUS_KEEPER)?.downloadReady ?: false
-            if (!isDone){
-                status(400).result("Bad request, session not ready")
+            if (!sessionData.downloadReady){
+                status(400).result("Bad request, session not ready. Sessiondata: $sessionData")
                 return
             }
-            val fileData = makeFile(emptyList())
-            result(fileData)
-                .contentType("text/plain") // "application/pdf"
-                .header("Content-Disposition", "attachment; filename=TEST_FILE.txt")
-            TODO("Above is just for reference. Build this from scratch.")
+            val inputStream = sessionData.downloadableFile?.inputStream()
+            if(inputStream == null){
+                println("inputStream = null")
+                status(500)
+                return
+            }
+            result(inputStream)
+                .contentType("application/pdf") // "application/pdf"
+                .header("Content-Disposition", "attachment; filename=TEST_FILE.pdf")
+            //TODO("Above is just for reference. Build this from scratch.")
         }
     }
-
-    private fun makeFile(data: List<BasicFlight>): InputStream = data.joinToString { it.toString() }.toByteArray().inputStream()
 }
