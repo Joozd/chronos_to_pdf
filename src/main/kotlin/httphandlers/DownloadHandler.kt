@@ -15,7 +15,7 @@ class DownloadHandler: SessionHandler() {
             }
             val inputStream = sessionData.downloadableFile?.inputStream()
             if(inputStream == null){
-                println("inputStream = null")
+                logger.info("inputStream = null from $sessionData")
                 status(500)
                 return
             }

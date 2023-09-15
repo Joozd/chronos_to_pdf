@@ -19,14 +19,13 @@ object EncryptionTest {
 
         assertEquals(keySize, key.size)
         assert(!ByteArray(keySize).contentEquals(key)) // check testKey is not just an empty 32-byte ByteArray
-        assert(!wrongKey!!.contentEquals(testKey)) // assert wrongKey is not the same as testKey. This part can fail on average once every 2^256 tests.
+        assert(!wrongKey.contentEquals(testKey)) // assert wrongKey is not the same as testKey. This part can fail on average once every 2^256 tests.
         assertEquals(base64Encoder().encodeToString(key), testKey)
     }
 
     @Test
     fun test_encryptDecrypt(){
         val encrypted = Encryption.encryptData(data = testData, base64Key = testKey)
-        println(1)
 
         // Check at least something has happened to the testData
         assert(!testData.toByteArray(Charsets.UTF_8).contentEquals(encrypted))
