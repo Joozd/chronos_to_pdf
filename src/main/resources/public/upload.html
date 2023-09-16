@@ -2,28 +2,42 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>File Upload</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            padding: 20px;
-        }
-        .download-link {
-            display: none;
-            margin-top: 20px;
-        }
-    </style>
+    <title>File Upload Form</title>
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
 
-<h2>Upload a PDF File</h2>
-<!--suppress HtmlUnknownTarget  // handled in code -->
 <form action="/upload" method="post" enctype="multipart/form-data">
-    <input type="file" name="files" multiple>
-    <input type="submit" value="Upload">
-</form>
+    <h2>Upload Chrono Files</h2>
+    <p>Any files you add will be added to the already existing files on the server.</p>
+    <p>Supported files: KLM Chronos (checked for ICA), KLC monthly overviews, Joozdlog CSV, some exports for MCcPilotLog and LogTen pro. Try it, mail me files that fail!</p>
+    <p>The data in the uploaded chrono's is not complete, so some assumptions will be made:</p>
+    <ul>
+        <li>All flights are with 2 crew</li>
+        <li>All simulators are done in the type that the next flight after it was done in</li>
+        <li>No other (private) flights are flown in the period</li>
+        <li>All flights are IFR</li>
+        <li>Not all simulator duties might appear. If that is the case, please mail a roster with it to joozd@joozd.nl</li>
 
+    </ul>
+    <p>If you run into any issues or have feedback, please contact me at joozd@joozd.nl</p>
+    <p><b>This is still work in progress. Please provide your own cover page.</b></p>
+
+    <input type="file" name="files" id="files" multiple>
+
+    <label class="checkbox-label">
+        <input type="checkbox" id="logLanding" name="logLanding" value="true" checked>
+        Randomly add landings to 50% of flights
+    </label>
+    <label class="checkbox-label">
+        <input type="checkbox" id="guessSimType" name="guessSimType" value="true" checked>
+        Guess simulator type based on the next flight
+    </label>
+
+
+
+    <button type="submit">Generate PDF</button>
+</form>
 
 </body>
 </html>

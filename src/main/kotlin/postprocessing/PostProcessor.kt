@@ -1,9 +1,10 @@
 package postprocessing
 
+import data.PreferencesData
 import nl.joozd.joozdlogcommon.BasicFlight
 
 abstract class PostProcessor {
-    abstract fun postProcess(flights: List<BasicFlight>): List<BasicFlight>
+    abstract fun postProcess(flights: List<BasicFlight>, preferencesData: PreferencesData): List<BasicFlight>
 
     /**
      * Uppercase and only letters

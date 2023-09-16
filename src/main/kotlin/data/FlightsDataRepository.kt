@@ -88,14 +88,14 @@ object FlightsDataRepository {
         /**
          * Add flights from [importers] that are not yet in the database.
          */
-        fun addFlightsFromFiles(importers: Collection<FileImporter>): List<BasicFlight>{
+        fun addFlightsFromFiles(importers: Collection<FileImporter>, preferencesData: PreferencesData): List<BasicFlight>{
             val knownFlights = getDataForUser(loginWithKey) ?: return emptyList() // maybe throw an error about not being logged in?
             val flights = importers. map { it.getFile().getFlights() ?: emptyList() }
                 .flatten()
 
             val result = (flights + knownFlights) // new flights go  first, so they are saved (in case my algorithm gets improved)
                 .distinctTimes()     // flights with same time out and time in are the same flights. This does allow for only one simulator duty per day!
-                .postProcess()
+                .postProcess(preferencesData)
 
             insertDataForUser(loginWithKey, result)
 

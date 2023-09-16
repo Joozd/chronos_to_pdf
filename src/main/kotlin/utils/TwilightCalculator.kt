@@ -32,17 +32,16 @@ class TwilightCalculator(calculateDate: LocalDateTime) { // will know ALL the da
     /**
      * Checks if it is day at [airport].
      */
+    fun itIsDayAt(airport: Airport, time: Long): Boolean =
+     itIsDayAt(airport, Instant.ofEpochSecond(time))
+
+    /**
+     * Checks if it is day at [airport].
+     */
     fun itIsDayAt(airport: Airport, time: Instant): Boolean{
         return (dayTime(airport.latitude_deg, airport.longitude_deg).contains(LocalDateTime.of(date,time.toLocalTime())))
     }
 
-    /**
-     * Checks if it is day at [airport].
-     * @param time: Time in Z as local time
-     */
-    fun itIsDayAt(airport: Airport, time: LocalTime): Boolean{
-        return (dayTime(airport.latitude_deg, airport.longitude_deg).contains(LocalDateTime.of(date,time)))
-    }
     fun itIsDayAt(lat: Double, lon: Double, time: LocalDateTime): Boolean{
         return (dayTime(lat, lon).contains(LocalDateTime.of(date,time.toLocalTime())))
     }

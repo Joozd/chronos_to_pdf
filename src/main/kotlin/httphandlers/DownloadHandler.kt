@@ -22,7 +22,6 @@ class DownloadHandler: SessionHandler() {
             result(inputStream)
                 .contentType("application/pdf") // "application/pdf"
                 .header("Content-Disposition", "attachment; filename=TEST_FILE.pdf")
-            //TODO("Above is just for reference. Build this from scratch.")
         }
     }
 }

@@ -1,5 +1,6 @@
 package postprocessing
 
+import data.PreferencesData
 import data.R
 import nl.joozd.joozdlogcommon.BasicFlight
 
@@ -10,7 +11,7 @@ object AircraftPostprocessor: PostProcessor() {
     private val aircraftMap = buildAircraftMap() // map of shortName to Aircraft
     private val registrationMap = buildRegistrationMap() // map of registration to shortname
 
-    override fun postProcess(flights: List<BasicFlight>): List<BasicFlight> = flights.map{ f ->
+    override fun postProcess(flights: List<BasicFlight>, preferencesData: PreferencesData): List<BasicFlight> = flights.map{ f ->
         if(f.isSim) return@map f // do not process sim outside postProcessSim
         val aircraftType = registrationMap[f.registration.standardize()] ?: f.aircraft
         val aircraft = aircraftMap[aircraftType]
@@ -26,14 +27,14 @@ object AircraftPostprocessor: PostProcessor() {
             multiPilotTime = multiPilotTime,
             name = name
             )
-    }.postProcessSim()
+    }.postProcessSim(preferencesData)
 
     /**
      * This guesses the type of sim based on what aircraft has been flown on the first flight after this simulator duty.
      * Does not change type if it has been entered.
      */
-    private fun List<BasicFlight>.postProcessSim(): List<BasicFlight> = mapIndexed{ i, f ->
-        if (!f.isSim || f.aircraft.isNotBlank()) return@mapIndexed f // only change sim flights that have no type data yet
+    private fun List<BasicFlight>.postProcessSim(preferencesData: PreferencesData): List<BasicFlight> = mapIndexed{ i, f ->
+        if (!preferencesData.addTypeToSim || !f.isSim || f.aircraft.isNotBlank()) return@mapIndexed f // only change sim flights that have no type data yet
 
         // if no aircraft flown after this duty, don't add a type. I thought about the last one flown before,
         // but that would give wrong type on a TQ, which probably spans the last entry in a month.
