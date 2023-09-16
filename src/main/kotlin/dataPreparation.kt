@@ -17,7 +17,7 @@ import java.nio.file.Paths
  */
 fun main() {
     val aircraftPath = Paths.get("c:\\joozdlog\\aircrafttypes_7.txt")
-    val registrationPath = Paths.get("c:\\joozdlog\\forcedtypes_5.txt")
+    val registrationPath = Paths.get("c:\\joozdlog\\forcedtypes_6.txt")
     val aircraftLines = Files.readAllLines(aircraftPath)
     val registrationLines = Files.readAllLines(registrationPath)
 
