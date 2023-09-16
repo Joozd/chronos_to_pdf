@@ -3,51 +3,60 @@
 <head>
     <title>Login Email</title>
     <style>
-        body {
-          font-family: Arial, sans-serif;
+        * {
+            box-sizing: border-box;
         }
-        .email-container {
-          background-color: #f7f9fc;
-          padding: 20px;
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f7f9fc;
+            padding: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
         .email-content {
-          background-color: #ffffff;
-          padding: 30px 20px;
-          border-radius: 8px;
-          max-width: 600px;
-          margin: auto;
+            background-color: #ffffff;
+            padding: 30px 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            max-width: 450px;
+            width: 100%;
+            text-align: center;
         }
         h2 {
-          text-align: center;
-          margin-bottom: 20px;
+            margin-bottom: 20px;
         }
         p {
-          font-size: 16px;
-          line-height: 1.5;
+            margin-bottom: 15px;
+            font-size: 16px;
+            line-height: 1.5;
         }
         .login-button {
-          display: inline-block;
-          padding: 10px 20px;
-          background-color: #007bff;
-          color: #ffffff;
-          text-decoration: none;
-          border-radius: 4px;
-          font-size: 16px;
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: #ffffff;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            text-decoration: none;
+            font-size: 16px;
+            transition: background-color 0.3s ease;
+        }
+        .login-button:hover {
+            background-color: #0056b3;
         }
     </style>
 </head>
 <body>
 
-<div class="email-container">
-    <div class="email-content">
-        <h2>Welcome to Joozd!</h2>
-        <p>
-            To log in to your account, please click the button below.
-        </p>
-        <p>
-            <a href="[PLACEHOLDER_LOGIN_LINK_GOES_HERE]" class="login-button">Login</a>
-        </p>
-    </div>
+<div class="email-content">
+    <h2>Welcome to Joozd's Chronos to PDF service!</h2>
+    <p>To log in to your account, please click the button below.</p>
+    <p>This is the only way to log into your account. If you lose this link, you will have to recreate your account and upload all your monthly overviews again. There is no "lost login" option.</p>
+    <p>
+        <a href="[PLACEHOLDER_LOGIN_LINK_GOES_HERE]" class="login-button">Login</a>
+    </p>
 </div>
 
 </body>
