@@ -19,13 +19,12 @@ object AircraftPostprocessor: PostProcessor() {
 
         val isCopilot = aircraft.multiPilot && !f.isPIC
         val multiPilotTime = if (aircraft.multiPilot) (f.timeIn - f.timeOut).toInt() / 60 else 0
-        val name = if (f.isPIC) "SELF" else ""
+
 
         f.copy(
             aircraft = aircraftType,
             isCoPilot = isCopilot,
             multiPilotTime = multiPilotTime,
-            name = name
             )
     }.postProcessSim(preferencesData)
 
