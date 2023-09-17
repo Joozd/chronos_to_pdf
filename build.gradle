@@ -22,6 +22,9 @@ dependencies {
     // Kotlin Coroutines
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.3"
 
+    // guava
+    implementation 'com.google.guava:guava:32.1.2-jre' // Check for the latest version
+
     // HTTP server
     implementation("io.javalin:javalin:5.6.1")
 

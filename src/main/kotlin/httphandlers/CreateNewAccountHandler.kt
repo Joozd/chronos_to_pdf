@@ -14,11 +14,20 @@ class CreateNewAccountHandler: SessionHandler() {
     override fun handleWithSessionData(ctx: Context, sessionData: SessionData) {
         with(ctx) {
             sessionData.emailAddress?.let { address ->
-                ioScope?.launch {
-                    val newLoginData = LoginDataRepository.createNewUser(address)
-                    Mailer().sendNewUserMail(address, newLoginData)
+                if(LoginDataRepository.checkIfEmailUsed(address)) {
+                    ioScope?.launch {
+                        val resetData = LoginDataRepository.createResetData(address)
+                        Mailer().sendResetMail(address, resetData)
+                    }
+                    redirect("/confirmation_reset.html")
                 }
-                redirect("/confirmation.html")
+                else {
+                    ioScope?.launch {
+                        val newLoginData = LoginDataRepository.createNewUser(address)
+                        Mailer().sendNewUserMail(address, newLoginData)
+                    }
+                    redirect("/confirmation.html")
+                }
                 return
             }
         }

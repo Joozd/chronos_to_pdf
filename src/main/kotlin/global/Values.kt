@@ -6,6 +6,7 @@ object Values {
 
     const val UID = "UID"
     const val KEY = "KEY"
+    const val RESET = "RESET"
 
     const val PREF_LOG_LANDING = "logLanding"
     const val PREF_GUESS_SIM_TYPE = "guessSimType"

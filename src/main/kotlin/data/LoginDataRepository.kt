@@ -1,14 +1,24 @@
 package data
 
 import SecureHasher
+import com.google.common.cache.Cache
+import com.google.common.cache.CacheBuilder
 import data.logindata.LoginData
 import data.logindata.LoginWithKey
 import data.logindata.User
 import data.security.Encryption
 import org.jetbrains.exposed.sql.transactions.transaction
 import utils.base64Encoder
+import utils.extensions.set
+import utils.extensions.get
+import kotlin.time.Duration.Companion.hours
+import kotlin.time.toJavaDuration
 
 object LoginDataRepository {
+    private val emailResetData: Cache<String, EmailResetData> = CacheBuilder.newBuilder()
+        .expireAfterWrite(24.hours.toJavaDuration())
+        .build()
+
     /**
      * Checks if login data for a combination of [uid] and [base64key] is correct.
      */
@@ -38,7 +48,7 @@ object LoginDataRepository {
      * If a user already exists, it overwrites that user's data.
      */
     fun createNewUser(emailAddress: String): LoginWithKey{
-        // Generate a unique username
+        // Username is email address hashed
         val uid = emailToUid(emailAddress)
 
         val key = Encryption.generateSecureRandomData()
@@ -53,6 +63,26 @@ object LoginDataRepository {
 
         return LoginWithKey(uid, base64key)
     }
+
+    /**
+     * Create EmailResetData.
+     */
+    fun createResetData(emailAddress: String): LoginWithKey {
+        val hash = emailToUid(emailAddress)
+        val key = Encryption.generateSecureRandomData()
+        val base64key = base64Encoder().encodeToString(key)
+        emailResetData[hash] = EmailResetData(emailAddress, base64key)
+        return LoginWithKey(hash, base64key)
+    }
+
+    /**
+     * Check if reset data is correct.
+     * returns the email address for the reset email if reset data matches or null if login data did not match cached data.
+     */
+    fun checkResetData(uid: String, key: String): String? =
+        emailResetData[uid]
+            ?.takeIf { it.resetCode == key }
+            ?.emailAddress
 
 
     /**
