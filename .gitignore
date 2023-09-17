@@ -40,3 +40,5 @@ bin/
 
 ### Mac OS ###
 .DS_Store
+/database.mv.db
+/src/main/resources/airports.json
