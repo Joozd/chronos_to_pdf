@@ -5,6 +5,7 @@ import data.logindata.LoginWithKey
 import data.security.Encryption
 import nl.joozd.joozdlogcommon.BasicFlight
 import nl.joozd.joozdlogimporter.interfaces.FileImporter
+import nl.joozd.joozdlogimporter.supportedFileTypes.PlannedFlightsFile
 import org.jetbrains.exposed.sql.statements.api.ExposedBlob
 import org.jetbrains.exposed.sql.transactions.transaction
 import utils.extensions.distinctTimes
@@ -90,7 +91,7 @@ object FlightsDataRepository {
          */
         fun addFlightsFromFiles(importers: Collection<FileImporter>, preferencesData: PreferencesData): List<BasicFlight>{
             val knownFlights = getDataForUser(loginWithKey) ?: return emptyList() // maybe throw an error about not being logged in?
-            val flights = importers. map { it.getFile().getFlights() ?: emptyList() }
+            val flights = importers.mapNotNull { it.getFile().takeIf { file -> file !is PlannedFlightsFile }?.getFlights() ?: emptyList() }
                 .flatten()
 
             val result = (flights + knownFlights) // new flights go  first, so they are saved (in case my algorithm gets improved)
