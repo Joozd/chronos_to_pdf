@@ -96,11 +96,12 @@ object FlightsDataRepository {
 
             val result = (flights + knownFlights) // new flights go  first, so they are saved (in case my algorithm gets improved)
                 .distinctTimes()     // flights with same time out and time in are the same flights. This does allow for only one simulator duty per day!
+                .sortedBy { it.timeOut }
                 .postProcess(preferencesData)
 
             insertDataForUser(loginWithKey, result)
 
-            return result.sortedBy { it.timeOut }
+            return result
         }
     }
 }

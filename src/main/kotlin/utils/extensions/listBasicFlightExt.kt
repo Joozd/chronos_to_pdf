@@ -6,6 +6,9 @@ import postprocessing.AircraftPostprocessor
 import postprocessing.AirportPostProcessor
 import postprocessing.GeneralPostProcessor
 
+/**
+ * THIS NEEDS A SORTED LIST or things will go wrong.
+ */
 fun List<BasicFlight>.postProcess(preferencesData: PreferencesData): List<BasicFlight> {
     var list = AircraftPostprocessor.postProcess(this, preferencesData)
     list = GeneralPostProcessor.postProcess(list, preferencesData)

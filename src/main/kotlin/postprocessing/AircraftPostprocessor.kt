@@ -3,6 +3,7 @@ package postprocessing
 import data.PreferencesData
 import data.R
 import nl.joozd.joozdlogcommon.BasicFlight
+import java.util.*
 
 /**
  * This takes care of aircraft types and if they are multi pilot or not.
@@ -31,15 +32,34 @@ object AircraftPostprocessor: PostProcessor() {
     /**
      * This guesses the type of sim based on what aircraft has been flown on the first flight after this simulator duty.
      * Does not change type if it has been entered.
+     * THIS NEEDS A SORTED LIST
      */
-    private fun List<BasicFlight>.postProcessSim(preferencesData: PreferencesData): List<BasicFlight> = mapIndexed{ i, f ->
-        if (!preferencesData.addTypeToSim || !f.isSim || f.aircraft.isNotBlank()) return@mapIndexed f // only change sim flights that have no type data yet
+    private fun List<BasicFlight>.postProcessSim(preferencesData: PreferencesData): List<BasicFlight> { // = mapIndexed{ i, f ->
+        if (!preferencesData.addTypeToSim) return this
 
-        // if no aircraft flown after this duty, don't add a type. I thought about the last one flown before,
-        // but that would give wrong type on a TQ, which probably spans the last entry in a month.
-        // This way, it will get corrected when the first roster with a flight in it is uploaded.
-        val type = this.drop(i+1).firstOrNull { it.aircraft.isNotBlank() }?.aircraft ?: "" // first aircraft type flown after this sim duty.
-        f.copy(aircraft = type)
+        val currentList = LinkedList(this)
+
+        var currentTime = Long.MIN_VALUE
+
+        return buildList {
+            while (currentList.isNotEmpty()) {
+                val f = currentList.removeFirst()
+
+                // If list is unsorted, this will fail.
+                if (f.timeOut < currentTime){
+                    logger.error("Trying to get aircraft type with an unsorted list")
+                    return this
+                }
+                currentTime = f.timeOut
+
+                if (!f.isSim || f.aircraft.isNotBlank()) {
+                    val type = currentList.firstOrNull { it.aircraft.isNotBlank() }?.aircraft ?: ""
+                    add(f.copy(aircraft = type))
+                }
+                else
+                    add(f)
+            }
+        }.toList()
     }
 
     private fun buildAircraftMap(): Map<String, Aircraft>{
