@@ -99,7 +99,7 @@ object FlightsDataRepository {
 
             insertDataForUser(loginWithKey, result)
 
-            return result
+            return result.sortedBy { it.timeOut }
         }
     }
 }
