@@ -52,7 +52,7 @@ object AircraftPostprocessor: PostProcessor() {
                 }
                 currentTime = f.timeOut
 
-                if (!f.isSim || f.aircraft.isNotBlank()) {
+                if (f.isSim && f.aircraft.isBlank()) {
                     val type = currentList.firstOrNull { it.aircraft.isNotBlank() }?.aircraft ?: ""
                     add(f.copy(aircraft = type))
                 }
