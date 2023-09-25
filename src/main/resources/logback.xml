@@ -8,8 +8,8 @@
 
     <!-- File Appender -->
     <appender name="FILE" class="ch.qos.logback.core.FileAppender">
-        <file>c:/temp/chronos.log</file>
-        <!-- <file>/opt/chronos/log/chronos.log</file> -->
+        <!-- file>c:/temp/chronos.log</file> -->
+        <file>/opt/chronos/log/chronos.log</file>
         <encoder>
             <pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>
         </encoder>
