@@ -1,3 +1,21 @@
 package data
 
-data class PreferencesData(val addLandings: Boolean, val addTypeToSim: Boolean)
+import com.fasterxml.jackson.annotation.JsonCreator
+import com.fasterxml.jackson.annotation.JsonProperty
+
+/**
+ * Preferences for postprocessing flights
+ */
+data class PreferencesData @JsonCreator constructor(
+    @JsonProperty("logLanding") val logLanding: Boolean,
+    @JsonProperty("guessSimType") val guessSimType: Boolean,
+    @JsonProperty("function") val function: String
+){
+    companion object{
+        val DEFAULT get() = PreferencesData(logLanding = true, guessSimType = true, function = FO)
+        // Function names
+        const val CAPTAIN = "Captain"
+        const val FO = "FO"
+        const val SO = "SO"
+    }
+}

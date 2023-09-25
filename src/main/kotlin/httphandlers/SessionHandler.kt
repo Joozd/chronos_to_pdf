@@ -14,9 +14,9 @@ import utils.extensions.getSessionData
 abstract class SessionHandler: Handler {
     protected val logger: Logger get() = LoggerFactory.getLogger(this::class.java)
     override fun handle(ctx: Context) {
-        handleWithSessionData(ctx, ctx.getSessionData())
+        ctx. handleWithSessionData(ctx.getSessionData())
     }
-    abstract fun handleWithSessionData(ctx: Context, sessionData: SessionData)
+    abstract fun Context.handleWithSessionData(sessionData: SessionData)
 
     /**
      * check if [sessionData] contains valid login data

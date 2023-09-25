@@ -28,7 +28,7 @@ function submitForm() {
   var form = document.getElementById('userChoicesForm');
   var formData = new FormData(form);
 
-  fetch('YOUR_BACKEND_ENDPOINT', {
+  fetch('/update_preferences', {
     method: 'POST',
     body: formData
   })

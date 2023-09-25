@@ -23,7 +23,12 @@ data class SessionData(
     /**
      * Email address for user, for account creation
      */
-    var emailAddress: String? = null
+    var emailAddress: String? = null,
+
+    /**
+     * Hold preferences for creating a logbook
+     */
+    var preferences: PreferencesData = PreferencesData.DEFAULT
 ){
     var downloadableFile: ByteArray? = null
 }

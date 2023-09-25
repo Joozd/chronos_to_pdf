@@ -11,28 +11,26 @@ import utils.extensions.ioScope
  * Receive a POST to email user
  */
 class CreateNewAccountHandler: SessionHandler() {
-    override fun handleWithSessionData(ctx: Context, sessionData: SessionData) {
-        with(ctx) {
-            sessionData.emailAddress?.let { address ->
-                if(LoginDataRepository.checkIfEmailUsed(address)) {
-                    ioScope?.launch {
-                        val resetData = LoginDataRepository.createResetData(address)
-                        Mailer().sendResetMail(address, resetData)
-                    }
-                    redirect("/confirmation_reset.html")
+    override fun Context.handleWithSessionData(sessionData: SessionData) {
+        sessionData.emailAddress?.let { address ->
+            if (LoginDataRepository.checkIfEmailUsed(address)) {
+                ioScope?.launch {
+                    val resetData = LoginDataRepository.createResetData(address)
+                    Mailer().sendResetMail(address, resetData)
                 }
-                else {
-                    ioScope?.launch {
-                        val newLoginData = LoginDataRepository.createNewUser(address)
-                        Mailer().sendNewUserMail(address, newLoginData)
-                    }
-                    redirect("/confirmation.html")
+                redirect("/confirmation_reset.html")
+            } else {
+                ioScope?.launch {
+                    val newLoginData = LoginDataRepository.createNewUser(address)
+                    Mailer().sendNewUserMail(address, newLoginData)
                 }
-                return
+                redirect("/confirmation.html")
             }
+            return
         }
+
         // If we get here, user did something wrong. Send him back to start.
         logger.warn("something went wrong aub / sessionData: $sessionData")
-        ctx.redirect("/")
+        redirect("/")
     }
 }

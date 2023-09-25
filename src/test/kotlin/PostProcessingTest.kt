@@ -18,7 +18,7 @@ class PostProcessingTest {
         val picFlight = BasicFlight.PROTOTYPE.copy(aircraft = "XXX1", timeOut = testDay + 200000, timeIn = testDay + 210000, isPIC = true) // normal flight, a bit over a day later, duration = 10000
         val notPicFlight = BasicFlight.PROTOTYPE.copy(aircraft = "XXX2", timeOut = testDay + 300000, timeIn = testDay + 310000) // normal flight, a bit over a day later, duration = 10000
         val flights = listOf(simFlight, nextFlight,picFlight, notPicFlight)
-        val processedFlights = GeneralPostProcessor.postProcess(flights, PreferencesData(addLandings = false, addTypeToSim = true))
+        val processedFlights = GeneralPostProcessor.postProcess(flights, PreferencesData(logLanding = false, guessSimType = true))
 
         //check if type gets added to sim
         assertEquals("", flights.first().aircraft)

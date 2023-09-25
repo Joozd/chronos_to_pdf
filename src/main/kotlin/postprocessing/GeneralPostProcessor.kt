@@ -26,7 +26,7 @@ object GeneralPostProcessor: PostProcessor() {
      * THIS NEEDS A SORTED LIST
      */
     private fun List<BasicFlight>.postProcessSim(preferencesData: PreferencesData): List<BasicFlight> { // = mapIndexed{ i, f ->
-        if (!preferencesData.addTypeToSim) return this
+        if (!preferencesData.guessSimType) return this
 
         val currentList = LinkedList(this)
 

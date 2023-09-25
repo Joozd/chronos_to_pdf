@@ -30,5 +30,6 @@ fun main() {
 
         .post("check_existing", CheckIfEmailExistsHandler())
         .post("/upload", UploadHandler())
+        .post("/update_preferences", UpdatePreferencesHandler())
         .start(7070)
 }

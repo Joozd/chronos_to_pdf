@@ -31,7 +31,7 @@ object AirportPostProcessor: PostProcessor() {
         val nightTime = twilightCalculator.minutesOfNight(orig, dest, f.timeOut, f.timeIn)
         val landingDay: Int
         val landingNight: Int
-        if(preferencesData.addLandings){
+        if(preferencesData.logLanding){
             // add 0 or 1 landings to this flight. Day and night are correct for time and place.
             val dayLanding = twilightCalculator.itIsDayAt(dest, f.timeIn)
             val landings = Random.nextInt(2)
