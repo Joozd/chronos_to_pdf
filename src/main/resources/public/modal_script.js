@@ -24,30 +24,50 @@ window.onclick = function(event) {
   }
 }
 
+function getFormDataAsJSON(form) {
+    let formData = new FormData(form);
+    let jsonObject = {};
+    for (const [key, value] of formData.entries()) {
+        jsonObject[key] = value;
+    }
+    return JSON.stringify(jsonObject);
+}
+
+
 function submitForm() {
-  var form = document.getElementById('userChoicesForm');
-  var formData = new FormData(form);
+    var form = document.getElementById('userChoicesForm');
+    var jsonData = getFormDataAsJSON(form);
 
   fetch('/update_preferences', {
-    method: 'POST',
-    body: formData
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: jsonData
   })
-  .then(response => response.json())
-  .then(data => console.log('Success:', data))
-  .catch((error) => console.error('Error:', error));
+    .then(response => {
+        if (!response.ok) {
+            throw Error(`HTTP error! Status: ${response.status}`);
+        }
+    })
+    .catch((error) => console.error('Error:', error));
 
-  // Close the modal after submitting the form
-  modal.style.display = "none";
+    // Close the modal after submitting the form
+    modal.style.display = "none";
 }
 
 // Function to show help modal with a given message
+/*
+    NOTE only use this with the hardcoded messages in strings.js as the message allows for HTML
+    which can expose the site to Cross-Site Scripting (XSS) attacks
+ */
 function showHelpModal(message) {
   // Get the help modal and the element to display the help message
   var helpModal = document.getElementById("helpModal");
   var helpMessage = document.getElementById("helpMessage");
 
   // Set the help message and show the modal
-  helpMessage.textContent = message;
+  helpMessage.innerHTML = message;
   helpModal.style.display = "block";
 }
 

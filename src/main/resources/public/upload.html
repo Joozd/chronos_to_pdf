@@ -14,14 +14,14 @@
     <h2>Upload Chrono Files</h2>
     <p>Any files you add will be added to the already existing files on the server.</p>
     <p>Supported files: KLM Chronos (checked for ICA), KLC monthly overviews, Joozdlog CSV, some exports for MCcPilotLog and LogTen pro. Try it, mail me files that fail!</p>
-    <p>The data in the uploaded chrono's is not complete, so some assumptions will be made:</p>
+    <p>The data in the uploaded chrono's is not complete, so some assumptions will be made for now:</p>
     <ul>
         <li>All flights are with 2 crew</li>
-        <li>All simulators are done in the type that the next flight after it was done in</li>
-        <li>No other (private) flights are flown in the period</li>
         <li>All flights are IFR</li>
         <li>Not all simulator duties might appear. If that is the case, please mail a roster with it to joozd@joozd.nl</li>
     </ul>
+    <p><b>Please check your preferences before generating a logbook. They are not saved between sessions(yet).</b></p>
+
 
     <!-- Add Modal Trigger Button Here -->
     <button type="button" id="openModalBtn">Adjust Values</button>
@@ -30,15 +30,6 @@
     <p><b>This is still work in progress. Please provide your own cover page.</b></p>
 
     <input type="file" name="files" id="files" multiple>
-
-    <label class="checkbox-label">
-        <input type="checkbox" id="logLanding_2" name="logLanding" value="true" checked>
-        Randomly add landings to 50% of flights
-    </label>
-    <label class="checkbox-label">
-        <input type="checkbox" id="guessSimType_2" name="guessSimType" value="true" checked>
-        Guess simulator type based on the next flight
-    </label>
 
     <button type="submit">Generate PDF</button>
 </form>
@@ -60,6 +51,12 @@
                 Guess simulator type based on the next flight
                 <!-- Help label - javascript opens a help box with the text in data-help-->
                 <a href="#" class="helpBtn" data-help="guessSimTypeHelp">More info</a>
+            </label>
+            <label class="checkbox-label">
+                <input type="checkbox" id="removeSimTypes" name="removeSimTypes" value="true">
+                Remove all simulator types
+                <!-- Help label - javascript opens a help box with the text in data-help-->
+                <a href="#" class="helpBtn" data-help="removeSimTypesHelp">More info</a>
             </label>
 
             <!-- Dropdown -->

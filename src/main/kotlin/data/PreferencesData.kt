@@ -9,10 +9,11 @@ import com.fasterxml.jackson.annotation.JsonProperty
 data class PreferencesData @JsonCreator constructor(
     @JsonProperty("logLanding") val logLanding: Boolean,
     @JsonProperty("guessSimType") val guessSimType: Boolean,
-    @JsonProperty("function") val function: String
+    @JsonProperty("removeSimTypes") val removeSimTypes: Boolean,
+    @JsonProperty("function") val function: String,
 ){
     companion object{
-        val DEFAULT get() = PreferencesData(logLanding = true, guessSimType = true, function = FO)
+        val DEFAULT get() = PreferencesData(logLanding = true, guessSimType = true, function = FO, removeSimTypes = false)
         // Function names
         const val CAPTAIN = "Captain"
         const val FO = "FO"

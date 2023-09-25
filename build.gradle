@@ -32,7 +32,7 @@ dependencies {
     implementation("com.sun.mail:javax.mail:1.6.2")
 
     //logging
-    implementation("org.slf4j:slf4j-simple:2.0.7")
+    implementation("org.slf4j:slf4j-api:2.0.7")
     implementation("ch.qos.logback:logback-classic:1.4.11")
 
     // JSON

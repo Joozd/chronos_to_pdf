@@ -1,13 +1,17 @@
+import data.LoginDataRepository
 import data.flightsdata.EncryptedUserDataTable
 import data.logindata.Users
+import global.Values
 import httphandlers.*
 import io.javalin.Javalin
 import org.jetbrains.exposed.sql.Database
 import org.jetbrains.exposed.sql.SchemaUtils
 import org.jetbrains.exposed.sql.exists
 import org.jetbrains.exposed.sql.transactions.transaction
+import org.slf4j.LoggerFactory
 
 fun main() {
+    val logger = LoggerFactory.getLogger("MainKt")
     // connect Database
     Database.connect("jdbc:h2:./database", driver = "org.h2.Driver")
     transaction {
@@ -18,6 +22,12 @@ fun main() {
             SchemaUtils.create(EncryptedUserDataTable)
 
     }
+    println("BLABLA")
+
+    LoginDataRepository.createNewUser("test.user@klm.com").also{loginWithKey ->
+        logger.info("test user: ?${Values.UID}=${loginWithKey.uid}&${ Values.KEY}=${loginWithKey.base64Key}")
+    }
+
 
     Javalin.create { config ->
         config.staticFiles.add("/public")

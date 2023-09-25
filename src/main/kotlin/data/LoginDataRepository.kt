@@ -8,6 +8,7 @@ import data.logindata.LoginWithKey
 import data.logindata.User
 import data.security.Encryption
 import org.jetbrains.exposed.sql.transactions.transaction
+import org.slf4j.LoggerFactory
 import utils.base64Encoder
 import utils.extensions.set
 import utils.extensions.get
@@ -15,6 +16,8 @@ import kotlin.time.Duration.Companion.hours
 import kotlin.time.toJavaDuration
 
 object LoginDataRepository {
+    private val logger = LoggerFactory.getLogger(this::class.java)
+
     private val emailResetData: Cache<String, EmailResetData> = CacheBuilder.newBuilder()
         .expireAfterWrite(24.hours.toJavaDuration())
         .build()
@@ -117,8 +120,4 @@ object LoginDataRepository {
             User.findById(username)?.toLoginData()
         }
     }
-
-
-
-
 }
