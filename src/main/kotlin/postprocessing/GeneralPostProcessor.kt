@@ -19,13 +19,25 @@ object GeneralPostProcessor: PostProcessor() {
         ) // all imported flights are IFR.
     }.postProcessSim(preferencesData)
 
+    private fun List<BasicFlight>.postProcessSim(preferencesData: PreferencesData) =
+        this.removeTypeFromSim(preferencesData)
+            .addTypesToSim(preferencesData)
+
+
+    /**
+     * This removes the aircraft types from simulator sessions.
+     */
+    private fun List<BasicFlight>.removeTypeFromSim(preferencesData: PreferencesData): List<BasicFlight> =
+        if (!preferencesData.removeSimTypes) this
+        else this.map { f -> if (!f.isSim) f else f.copy(aircraft = "") }
+
 
     /**
      * This guesses the type of sim based on what aircraft has been flown on the first flight after this simulator duty.
      * Does not change type if it has been entered.
      * THIS NEEDS A SORTED LIST
      */
-    private fun List<BasicFlight>.postProcessSim(preferencesData: PreferencesData): List<BasicFlight> { // = mapIndexed{ i, f ->
+    private fun List<BasicFlight>.addTypesToSim(preferencesData: PreferencesData): List<BasicFlight> { // = mapIndexed{ i, f ->
         if (!preferencesData.guessSimType) return this
 
         val currentList = LinkedList(this)
