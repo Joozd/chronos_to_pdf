@@ -108,17 +108,62 @@ p {
     background-color: #0056b3;
 }
 
+.helpBtn {
+    display: inline; /* Ensure the link is displayed inline */
+    text-decoration: underline; /* Optional: to make it look more like a traditional link */
+    cursor: pointer; /* Optional: to indicate it's clickable */
+    color: blue; /* Optional: to style it like a traditional link */
+    /* Any other styles you want to apply to the link */
+}
+
 .checkbox-label {
     display: grid;
-    grid-template-columns: auto 1fr;
-
+    grid-template-columns: auto 1fr auto; /* Create three columns */
+    align-items: left; /* Align items vertically in the center */
     gap: 10px;
 }
 
+.dropdown-label {
+    display: flex; /* Use Flexbox */
+    align-items: center; /* Center items vertically */
+    justify-content: space-between; /* Space out the children elements */
+    margin-bottom: 10px;
+}
 
 #error-message {
     color: red;
     font-size: 14px;
     margin-top: 10px;
+}
+
+
+/* Modal Styles */
+.modal {
+  display: none;
+  position: fixed;
+  z-index: 1;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  background-color: rgba(0,0,0,0.4);
+}
+
+.modal-content {
+  background-color: #fefefe;
+  margin: 15% auto;
+  padding: 20px;
+  border: 1px solid #888;
+  width: 600px;
+  box-sizing: border-box; /* Include padding and border in element's total width and height */
+  box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+}
+
+/* Form inside Modal Content */
+.modal-content form {
+    width: 100%; /* Make form take the full width of its container */
+    max-width: 100%; /* Override any max-width set on the form */
+    box-sizing: border-box;
 }
 

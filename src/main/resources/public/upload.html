@@ -4,6 +4,9 @@
     <meta charset="UTF-8">
     <title>File Upload Form</title>
     <link rel="stylesheet" href="styles.css">
+    <script src="strings.js"></script> <!-- Link the strings file -->
+    <script src="email_submit_script.js" defer></script>
+    <script src="modal_script.js" defer></script> <!-- Include the JavaScript for the modal here -->
 </head>
 <body>
 
@@ -18,26 +21,74 @@
         <li>No other (private) flights are flown in the period</li>
         <li>All flights are IFR</li>
         <li>Not all simulator duties might appear. If that is the case, please mail a roster with it to joozd@joozd.nl</li>
-
     </ul>
+
+    <!-- Add Modal Trigger Button Here -->
+    <button type="button" id="openModalBtn">Adjust Values</button>
+
     <p>If you run into any issues or have feedback, please contact me at joozd@joozd.nl</p>
     <p><b>This is still work in progress. Please provide your own cover page.</b></p>
 
     <input type="file" name="files" id="files" multiple>
 
     <label class="checkbox-label">
-        <input type="checkbox" id="logLanding" name="logLanding" value="true" checked>
+        <input type="checkbox" id="logLanding_2" name="logLanding" value="true" checked>
         Randomly add landings to 50% of flights
     </label>
     <label class="checkbox-label">
-        <input type="checkbox" id="guessSimType" name="guessSimType" value="true" checked>
+        <input type="checkbox" id="guessSimType_2" name="guessSimType" value="true" checked>
         Guess simulator type based on the next flight
     </label>
 
-
-
     <button type="submit">Generate PDF</button>
 </form>
+
+<!-- Modal Dialog -->
+<div id="myModal" class="modal">
+    <div class="modal-content">
+        <span class="close">&times;</span>
+        <form id="userChoicesForm">
+            <!-- Toggle -->
+            <label class="checkbox-label">
+                <input type="checkbox" id="logLanding" name="logLanding" value="true" checked>
+                Randomly add landings to 50% of flights
+                <!-- Help label - javascript opens a help box with the text in data-help-->
+                <a href="#" class="helpBtn" data-help="logLandingHelp">More info</a>
+            </label>
+            <label class="checkbox-label">
+                <input type="checkbox" id="guessSimType" name="guessSimType" value="true" checked>
+                Guess simulator type based on the next flight
+                <!-- Help label - javascript opens a help box with the text in data-help-->
+                <a href="#" class="helpBtn" data-help="guessSimTypeHelp">More info</a>
+            </label>
+
+            <!-- Dropdown -->
+            <label class="dropdown-label">
+                Default function:
+                <select name="dropdown">
+                    <option value="Captain">Captain</option>
+                    <option value="FO">FO</option>
+                    <option value="SO">SO</option>
+                </select>
+                <!-- Help label - javascript opens a help box with the text in data-help-->
+                <a href="#" class="helpBtn" data-help="defaultFunctionHelp">Help</a>
+            </label>
+            <p>
+            <!-- Submit Button -->
+            <button type="button" onclick="submitForm()">Submit</button>
+            </p>
+        </form>
+    </div>
+</div>
+
+<!-- Help Modal Dialog -->
+<div id="helpModal" class="modal">
+    <div class="modal-content">
+        <span class="close">&times;</span>
+        <p id="helpMessage"></p>
+    </div>
+</div>
+
 
 </body>
 </html>
