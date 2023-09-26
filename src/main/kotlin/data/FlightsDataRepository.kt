@@ -27,6 +27,7 @@ object FlightsDataRepository {
             // get or create EncryptedUserData
             val existingUser = EncryptedUserData.findById(username)
             if (existingUser != null) {
+                existingUser.lastAccessed = Instant.now().epochSecond
                 existingUser.encryptedData = ExposedBlob(data)
             }
             else {
