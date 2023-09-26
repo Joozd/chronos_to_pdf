@@ -123,12 +123,12 @@ object FlightsDataRepository {
             val flights = getFlights() ?: emptyList()
             return flights.map{f ->
                 //isPic is, if supported, what the parser gave us; else what preferencesData gives us.
-                val isPic = if(supports(ImportedFile.RANK)) f.isPIC else preferencesData.function == PreferencesData.CAPTAIN
+                val isPic = if(supports(ImportedFile.RANK)) f.isPIC else preferencesData.defaultFunction == PreferencesData.CAPTAIN
 
                 // augmented crew is, if supported, what the parser gave us, else its 3 crew if user is SO or 2 crew is user is Captain of FO (prom preferencesData)
                 val crew: Int = if(supports(ImportedFile.RANK)) f.augmentedCrew
                 else
-                    if (preferencesData.function == PreferencesData.SO) AugmentedCrew.coco(takeoffLandingTimes = 0).toInt()
+                    if (preferencesData.defaultFunction == PreferencesData.SO) AugmentedCrew.coco(takeoffLandingTimes = 0).toInt()
                     else 0
 
                 f.copy(isPIC = isPic, augmentedCrew = crew)

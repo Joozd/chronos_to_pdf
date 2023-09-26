@@ -31,6 +31,7 @@ fun main() {
         .get("/status", StatusHandler())
         .get("/download", DownloadHandler())
         .get("/create_new_account", CreateNewAccountHandler())
+        .get("/prefs", PrefsHandler())
 
         .post("check_existing", CheckIfEmailExistsHandler())
         .post("/upload", UploadHandler())

@@ -24,6 +24,34 @@ window.onclick = function(event) {
   }
 }
 
+// Function to fetch user preferences from the backend and update the form elements
+function fetchUserPreferences() {
+  fetch('/prefs')
+    .then(response => {
+      if (!response.ok) {
+        throw new Error('Network response was not ok' + response.statusText);
+      }
+      return response.json();
+    })
+    .then(data => {
+    console.log('got data:');
+    console.log(data.logLanding);
+    console.log(data.guessSimType);
+    console.log(data.defaultFunction);
+      // Update the form elements with the fetched preferences
+      document.getElementById('logLanding').checked = data.logLanding;
+      document.getElementById('guessSimType').checked = data.guessSimType;
+      document.getElementById('removeSimTypes').checked = data.removeSimTypes;
+      document.querySelector(`select[name="defaultFunction"]`).value = data.defaultFunction;
+    })
+    .catch(error => {
+      console.error('There has been a problem with your fetch operation:', error);
+    });
+}
+
+// Call the function when the page loads
+document.addEventListener('DOMContentLoaded', fetchUserPreferences);
+
 function getFormDataAsJSON(form) {
     let formData = new FormData(form);
     let jsonObject = {};

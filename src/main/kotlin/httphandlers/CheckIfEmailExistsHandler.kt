@@ -9,18 +9,17 @@ import io.javalin.http.bodyAsClass
 
 class CheckIfEmailExistsHandler: SessionHandler() {
     override fun Context.handleWithSessionData(sessionData: SessionData) {
+        val email = try { bodyAsClass<EmailPayload>().email }
+        catch(e: Throwable) {
+            logger.warn("Bad data received: ${body()}")
+            logger.warn(e.stackTraceToString())
+            status(400)
+            return
+        }
+        val exists = LoginDataRepository.checkIfEmailUsed(email)
+        sessionData.emailAddress = email
 
-            val email = try { bodyAsClass<EmailPayload>().email }
-            catch(e: Throwable) {
-                logger.warn("Bad data received: ${body()}")
-                logger.warn(e.stackTraceToString())
-                status(400)
-                return
-            }
-            val exists = LoginDataRepository.checkIfEmailUsed(email)
-            sessionData.emailAddress = email
-
-            json(exists)
+        json(exists)
     }
 
     private data class EmailPayload @JsonCreator constructor(

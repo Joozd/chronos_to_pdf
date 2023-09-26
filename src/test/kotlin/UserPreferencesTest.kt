@@ -11,7 +11,7 @@ class UserPreferencesTest {
             logLanding = false,
             guessSimType = false,
             removeSimTypes = true,
-            function = PreferencesData.CAPTAIN
+            defaultFunction = PreferencesData.CAPTAIN
         )
         assertEquals(preferences1, preferences1)
         assertEquals(preferences1, PreferencesData.DEFAULT.copy())

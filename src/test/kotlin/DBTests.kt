@@ -92,7 +92,7 @@ class DBTests {
             logLanding = false,
             guessSimType = false,
             removeSimTypes = true,
-            function = PreferencesData.CAPTAIN
+            defaultFunction = PreferencesData.CAPTAIN
         )
 
         println("DEBUG: $loginData")

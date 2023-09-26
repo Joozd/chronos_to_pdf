@@ -11,11 +11,11 @@ data class PreferencesData @JsonCreator constructor(
     @JsonProperty("logLanding") val logLanding: Boolean,
     @JsonProperty("guessSimType") val guessSimType: Boolean,
     @JsonProperty("removeSimTypes") val removeSimTypes: Boolean,
-    @JsonProperty("function") val function: String,
+    @JsonProperty("defaultFunction") val defaultFunction: String,
 ){
     fun toJson() = jacksonObjectMapper().writeValueAsString(this)
     companion object{
-        val DEFAULT get() = PreferencesData(logLanding = true, guessSimType = true, removeSimTypes = false, function = FO)
+        val DEFAULT get() = PreferencesData(logLanding = true, guessSimType = true, removeSimTypes = false, defaultFunction = FO)
         // Function names
         const val CAPTAIN = "Captain"
         const val FO = "FO"
