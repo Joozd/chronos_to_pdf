@@ -1,6 +1,7 @@
 import data.LoginDataRepository
 import data.flightsdata.EncryptedUserDataTable
 import data.logindata.Users
+import data.userprefs.EncryptedUserPrefsTable
 import global.Values
 import httphandlers.*
 import io.javalin.Javalin
@@ -14,14 +15,7 @@ fun main() {
     val logger = LoggerFactory.getLogger("MainKt")
     // connect Database
     Database.connect("jdbc:h2:./database", driver = "org.h2.Driver")
-    transaction {
-        if(!Users.exists())
-            SchemaUtils.create(Users)
-
-        if(!EncryptedUserDataTable.exists())
-            SchemaUtils.create(EncryptedUserDataTable)
-
-    }
+    createTables()
     println("BLABLA")
 
     LoginDataRepository.createNewUser("test.user@klm.com").also{loginWithKey ->
@@ -42,4 +36,17 @@ fun main() {
         .post("/upload", UploadHandler())
         .post("/update_preferences", UpdatePreferencesHandler())
         .start(7070)
+}
+
+private fun createTables() {
+    transaction {
+        if (!Users.exists())
+            SchemaUtils.create(Users)
+
+        if (!EncryptedUserDataTable.exists())
+            SchemaUtils.create(EncryptedUserDataTable)
+
+        if (!EncryptedUserPrefsTable.exists())
+            SchemaUtils.create(EncryptedUserPrefsTable)
+    }
 }

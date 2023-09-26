@@ -1,8 +1,11 @@
 import data.FlightsDataRepository
 import data.LoginDataRepository
+import data.PreferencesData
+import data.UserPrefsRepository
 import data.flightsdata.EncryptedUserDataTable
 import data.logindata.Users
 import data.security.Encryption
+import data.userprefs.EncryptedUserPrefsTable
 import helpers.generateFlights
 import nl.joozd.joozdlogcommon.BasicFlight
 import org.jetbrains.exposed.sql.Database
@@ -25,6 +28,7 @@ class DBTests {
         transaction {
             SchemaUtils.create(Users)
             SchemaUtils.create(EncryptedUserDataTable)
+            SchemaUtils.create(EncryptedUserPrefsTable)
         }
         // Optionally create tables or other setup activities here.
     }
@@ -46,10 +50,11 @@ class DBTests {
         }
     }
 
+
     /**
      * Test creation, insertion and retrieval(checking) of login data
      */
-        @Test
+    @Test
     fun testCreateLoginData() {
         val loginData = LoginDataRepository.createNewUser(TEST_EMAIL_ADDRESS) // generate user, store in DB
         //check correct data is correct
@@ -75,6 +80,34 @@ class DBTests {
 
         assertEquals(flights, retrievedFlights)
     }
+
+    /**
+     * Test creation and retrieval of UserPreferences
+     */
+    @Test
+    fun testUserPreferencesData(){
+        val loginData = LoginDataRepository.createNewUser(TEST_EMAIL_ADDRESS) // generate user, store in DB
+        val preferences1 = PreferencesData.DEFAULT
+        val preferences2 = PreferencesData(
+            logLanding = false,
+            guessSimType = false,
+            removeSimTypes = true,
+            function = PreferencesData.CAPTAIN
+        )
+
+        println("DEBUG: $loginData")
+        val session = UserPrefsRepository.Session(loginData)
+        assertNull(session.getPreferencesData()) // no data present should give null
+        session.savePreferencesData(preferences1)
+        assertEquals(preferences1, session.getPreferencesData())
+        session.savePreferencesData(preferences2)
+        assertEquals(preferences2, session.getPreferencesData())
+
+        val newLoginData = loginData.copy(base64Key = Encryption.generateBase64Key())
+        val newSession = UserPrefsRepository.Session(newLoginData)
+        assertNull(newSession.getPreferencesData())
+    }
+
 
     @Test
     fun testCreateNewUserFromEmail(){
