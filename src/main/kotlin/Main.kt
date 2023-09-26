@@ -16,12 +16,6 @@ fun main() {
     // connect Database
     Database.connect("jdbc:h2:./database", driver = "org.h2.Driver")
     createTables()
-    println("BLABLA")
-
-    LoginDataRepository.createNewUser("test.user@klm.com").also{loginWithKey ->
-        logger.info("test user: ?${Values.UID}=${loginWithKey.uid}&${ Values.KEY}=${loginWithKey.base64Key}")
-    }
-
 
     Javalin.create { config ->
         config.staticFiles.add("/public")
@@ -37,6 +31,11 @@ fun main() {
         .post("/upload", UploadHandler())
         .post("/update_preferences", UpdatePreferencesHandler())
         .start(7070)
+
+    // create a test user for testing purposes. This users data gets deleted at every restart.
+    LoginDataRepository.createNewUser("test.user@klm.com").also{loginWithKey ->
+        logger.info("test user: ?${Values.UID}=${loginWithKey.uid}&${ Values.KEY}=${loginWithKey.base64Key}")
+    }
 }
 
 private fun createTables() {
