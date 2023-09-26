@@ -1,22 +1,15 @@
 package data.logindata
 
-import data.security.Encryption
-import java.security.SecureRandom
-
 data class LoginData(val username: String, val salt: ByteArray, val hash: ByteArray){
     override fun equals(other: Any?): Boolean {
-        if (this === other) return true
-        if (javaClass != other?.javaClass) return false
+        if (this === other) return true         // same object
+        if (other !is LoginData) return false   // different class
 
-        other as LoginData
-
-        if (username != other.username) return false
-        if (!salt.contentEquals(other.salt)) return false
-        if (!hash.contentEquals(other.hash)) return false
-
-        return true
+        // compare contents
+        return username == other.username
+                && salt.contentEquals(other.salt)
+                && hash.contentEquals(other.hash)
     }
-
     override fun hashCode(): Int {
         var result = username.hashCode()
         result = 31 * result + salt.contentHashCode()
