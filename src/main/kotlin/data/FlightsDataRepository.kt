@@ -92,8 +92,8 @@ object FlightsDataRepository {
     /**
      * A session holds login data for a user, so it can access the user's data.
      */
-    class Session(username: String, base64Key: String){
-        private val loginWithKey = LoginWithKey(username, base64Key)
+    class Session(private val loginWithKey: LoginWithKey){
+        constructor(username: String, base64Key: String): this(LoginWithKey(username, base64Key))
 
         /**
          * Add flights from [importers] that are not yet in the database.
