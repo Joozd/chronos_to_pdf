@@ -31,13 +31,13 @@ object AircraftPostprocessor: PostProcessor() {
 
 
     private fun buildAircraftMap(): Map<String, Aircraft>{
-        val aircraftList: List<Aircraft> = R.fromJson("aircraft.json")
+        val aircraftList: List<Aircraft> = R.fromJsonFile("aircraft.json")!! // forced not null, exception is what we want if aircraft data is missing
 
         return aircraftList.associateBy { it.shortName }
     }
 
     private fun buildRegistrationMap(): Map<String, String>{
-        val registrationsList: List<Registration> = R.fromJson("registration.json")
+        val registrationsList: List<Registration> = R.fromJsonFile("registration.json")!! // forced not null, exception is what we want if aircraft data is missing
 
         return registrationsList.associate { it.registration.standardize() to it.type }
     }

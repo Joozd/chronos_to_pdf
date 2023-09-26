@@ -58,7 +58,7 @@ object AirportPostProcessor: PostProcessor() {
      * Build two maps with Airport data: One with IATA codes as keys, and one with ICAO codes as keys.
      */
     private fun buildIataAndIcaoMap(): Pair<Map<String, Airport>, Map<String, Airport>> {
-        val airportsList: List<Airport> = R.fromJson("airports.json")
+        val airportsList: List<Airport> = R.fromJsonFile("airports.json")!! // forced not null, exception is what we want if airport data is missing
 
         return airportsList.associateBy { it.iata_code.standardize() } to airportsList.associateBy { it.ident }
     }
