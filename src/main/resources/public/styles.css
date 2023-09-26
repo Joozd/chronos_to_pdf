@@ -18,7 +18,7 @@ form {
     padding: 20px;
     border-radius: 8px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    max-width: 450px;
+    max-width: 500px;
     width: 100%;
 }
 
@@ -116,6 +116,13 @@ p {
     /* Any other styles you want to apply to the link */
 }
 
+.close {
+    position: absolute; /* Position it relative to the nearest positioned ancestor */
+    top: 10px; /* Distance from the top of the modal */
+    right: 10px; /* Distance from the right of the modal */
+    cursor: pointer; /* Change cursor to pointer when hovering over it */
+}
+
 .checkbox-label {
     display: grid;
     grid-template-columns: auto 1fr auto; /* Create three columns */
@@ -151,6 +158,7 @@ p {
 }
 
 .modal-content {
+  position: relative;
   background-color: #fefefe;
   margin: 15% auto;
   padding: 20px;

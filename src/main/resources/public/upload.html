@@ -12,19 +12,27 @@
 
 <form action="/upload" method="post" enctype="multipart/form-data">
     <h2>Upload Chrono Files</h2>
-    <p>Any files you add will be added to the already existing files on the server.</p>
-    <p>Supported files: KLM Chronos (checked for ICA), KLC monthly overviews, Joozdlog CSV, some exports for MCcPilotLog and LogTen pro. Try it, mail me files that fail!</p>
-    <p>The data in the uploaded chrono's is not complete, so some assumptions will be made for now:</p>
+    <p>Your flights will be saved (securely) on the server. If you save your login link, you can come back and add to it later!</p>
+    <p>Supported formats:</p>
     <ul>
+        <li>KLM Chronos (checked for ICA)</li>
+        <li>KLC monthly overviews</li>
+        <li>Joozdlog CSV</li>
+        <li>Some exports for MCCPilotLog and LogTen</li>
+        <li>mail me anything else you want supported!</li>
+    </ul>
+    <p>Some assumptions will be made to deal with missing data:</p>
+    <ul>
+        <li><b>You have looked at, and understand all preferences</b></li>
         <li>All flights are with 2 crew</li>
         <li>All flights are IFR</li>
         <li>Not all simulator duties might appear. If that is the case, please mail a roster with it to joozd@joozd.nl</li>
     </ul>
-    <p><b>Please check your preferences before generating a logbook. They are not saved between sessions(yet).</b></p>
+    <p><b>Please check your preferences before generating a logbook.</b></p>
 
 
     <!-- Add Modal Trigger Button Here -->
-    <button type="button" id="openModalBtn">Adjust Values</button>
+    <button type="button" id="openModalBtn">Preferences</button>
 
     <p>If you run into any issues or have feedback, please contact me at joozd@joozd.nl</p>
     <p><b>This is still work in progress. Please provide your own cover page.</b></p>
@@ -62,7 +70,7 @@
             <!-- Dropdown -->
             <label class="dropdown-label">
                 Default function:
-                <select name="function">
+                <select name="defaultFunction">
                     <option value="Captain">Captain</option>
                     <option value="FO">FO</option>
                     <option value="SO">SO</option>
