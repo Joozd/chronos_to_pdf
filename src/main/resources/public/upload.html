@@ -5,7 +5,7 @@
     <title>File Upload Form</title>
     <link rel="stylesheet" href="styles.css">
     <script src="strings.js"></script> <!-- Link the strings file -->
-    <script src="email_submit_script.js" defer></script>
+    <script src="get_form_data_as_json.js" defer></script>
     <script src="modal_script.js" defer></script> <!-- Include the JavaScript for the modal here -->
 </head>
 <body>
@@ -65,6 +65,12 @@
                 Remove all simulator types
                 <!-- Help label - javascript opens a help box with the text in data-help-->
                 <a href="#" class="helpBtn" data-help="removeSimTypesHelp">More info</a>
+            </label>
+            <label class="checkbox-label">
+                <input type="checkbox" id="multiCrewTimes" name="multiCrewTimes" value="true" checked>
+                Adjust times for in-flight rest
+                <!-- Help label - javascript opens a help box with the text in data-help-->
+                <a href="#" class="helpBtn" data-help="multiCrewTimesHelp">More info</a>
             </label>
 
             <!-- Dropdown -->

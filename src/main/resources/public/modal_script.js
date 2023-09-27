@@ -1,3 +1,8 @@
+/*
+*** DEPENDENCIES *** Make sure to include those in any html files that use this file before including this file.
+- get_form_data_as_json.js for getFormDataAsJSON(form)
+*/
+
 // Get the modal
 var modal = document.getElementById("myModal");
 
@@ -42,6 +47,7 @@ function fetchUserPreferences() {
       document.getElementById('logLanding').checked = data.logLanding;
       document.getElementById('guessSimType').checked = data.guessSimType;
       document.getElementById('removeSimTypes').checked = data.removeSimTypes;
+      document.getElementById('multiCrewTimes').checked = data.multiCrewTimes;
       document.querySelector(`select[name="defaultFunction"]`).value = data.defaultFunction;
     })
     .catch(error => {
@@ -51,16 +57,6 @@ function fetchUserPreferences() {
 
 // Call the function when the page loads
 document.addEventListener('DOMContentLoaded', fetchUserPreferences);
-
-function getFormDataAsJSON(form) {
-    let formData = new FormData(form);
-    let jsonObject = {};
-    for (const [key, value] of formData.entries()) {
-        jsonObject[key] = value;
-    }
-    return JSON.stringify(jsonObject);
-}
-
 
 function submitForm() {
     var form = document.getElementById('userChoicesForm');
