@@ -88,7 +88,7 @@ class DBTests {
     fun testUserPreferencesData(){
         val loginData = LoginDataRepository.createNewUser(TEST_EMAIL_ADDRESS) // generate user, store in DB
         val preferences1 = PreferencesData.DEFAULT
-        val preferences2 = PreferencesData(
+        val preferences2 = PreferencesData.DEFAULT.copy(
             logLanding = false,
             guessSimType = false,
             removeSimTypes = true,

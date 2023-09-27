@@ -32,6 +32,8 @@ class UploadHandler: SessionHandler() {
         }
         val flights = session.addFlightsFromFiles(importers, sessionData.preferences)
 
+        // this part can probably be done async as nothing from the session is needed anymore?
+        // The sessiomData object is not part of the session so should stay available.
         val outputStream = ByteArrayOutputStream()
 
         PdfLogbookBuilder(flights).buildToOutputStream(outputStream)

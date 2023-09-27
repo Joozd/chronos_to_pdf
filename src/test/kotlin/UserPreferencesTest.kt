@@ -7,7 +7,7 @@ class UserPreferencesTest {
     @Test
     fun testUserPreferencesEquals(){
         val preferences1 = PreferencesData.DEFAULT
-        val preferences2 = PreferencesData(
+        val preferences2 = PreferencesData.DEFAULT.copy(
             logLanding = false,
             guessSimType = false,
             removeSimTypes = true,
