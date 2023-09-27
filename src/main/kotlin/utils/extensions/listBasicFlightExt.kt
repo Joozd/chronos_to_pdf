@@ -2,6 +2,7 @@ package utils.extensions
 
 import data.PreferencesData
 import nl.joozd.joozdlogcommon.BasicFlight
+import nl.joozd.pdflogbookbuilder.extensions.totalTime
 import postprocessing.AircraftPostprocessor
 import postprocessing.AirportPostProcessor
 import postprocessing.GeneralPostProcessor
@@ -49,6 +50,19 @@ private fun BasicFlight.setMultiCrewTimes(preferencesData: PreferencesData): Bas
         else                            -> outToInMinutes/2     // +12 hours: Log 1/2
     }
 
+    val estimatedTime = timeOfFlight.takeIf { it != 0} ?: totalTime()
+
+    val newIfrTime = minOf (ifrTime, estimatedTime)
+    val newMultiPilotTime = minOf (multiPilotTime, estimatedTime)
+
+    val newNightTime = if (estimatedTime == totalTime()) nightTime
+        else (estimatedTime.toDouble() / totalTime() * nightTime).toInt()  // if times are shortened here, shorten nightTime accordingly
+
     // correctedTotalTime of 0 means the Flight decides based on AugmentedCrew value
-    return this.copy(correctedTotalTime = timeOfFlight)
+    return this.copy(
+        correctedTotalTime = timeOfFlight,
+        ifrTime = newIfrTime,
+        multiPilotTime = newMultiPilotTime,
+        nightTime = newNightTime
+    )
 }

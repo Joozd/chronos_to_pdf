@@ -6,6 +6,7 @@ import io.javalin.http.Context
 import nl.joozd.joozdlogimporter.JoozdlogImporter
 import nl.joozd.joozdlogimporter.SupportedMimeTypes
 import nl.joozd.pdflogbookbuilder.PdfLogbookBuilder
+import utils.extensions.prepareForLogbook
 import java.io.ByteArrayOutputStream
 
 class UploadHandler: SessionHandler() {
@@ -30,7 +31,7 @@ class UploadHandler: SessionHandler() {
             }
             JoozdlogImporter.ofInputStream(it.content(), mimeType)
         }
-        val flights = session.addFlightsFromFiles(importers, sessionData.preferences)
+        val flights = session.addFlightsFromFiles(importers, sessionData.preferences).prepareForLogbook(sessionData.preferences)
 
         // this part can probably be done async as nothing from the session is needed anymore?
         // The sessiomData object is not part of the session so should stay available.
