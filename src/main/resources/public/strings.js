@@ -15,6 +15,7 @@ const STRINGS = {
                         "<li>&lt;9 hours block time: 2 crew, log all unless rank is SO</li>" +
                         "<li>9-12 hours block time: 3 crew, log 2/3 unless rank is Captain</li>" +
                         "<li>&gt;12 hours block time: 4 crew, log 1/2 unless rank is Captain</li></ul>" +
+                        "<p>If this is deselected, flights logged as SO will still count for 2/3</p>" +
                         "<p>This option is only used for the currently generated pdf logbook; stored flights are not changed.</p>"
 
     // ... other strings ...
