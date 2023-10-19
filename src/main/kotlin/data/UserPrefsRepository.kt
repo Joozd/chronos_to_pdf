@@ -17,9 +17,6 @@ object UserPrefsRepository {
         transaction {
             // get or create EncryptedUserData
             val existingUserPrefs = EncryptedUserPrefs.findById(username)
-            println("************")
-            println("existingUserPrefs: $existingUserPrefs")
-            println("************")
 
             if (existingUserPrefs != null) {
                 existingUserPrefs.lastAccessed = Instant.now().epochSecond
@@ -61,15 +58,15 @@ object UserPrefsRepository {
      * Get PreferencesData for user. Null if user not found or key incorrect.
      */
     private fun getAndDecryptDataForUser(loginWithKey: LoginWithKey): PreferencesData? {
-        val encryptedUserPrefs = transaction { EncryptedUserPrefs.findById(loginWithKey.uid) } ?: return null
-        val json = Encryption.decryptDataToString(encryptedUserPrefs.encryptedData.bytes, loginWithKey.base64Key) ?: return null // maybe throw an exception instead of returning null?
+        val encryptedUserPrefs = getEncryptedDataForUser(loginWithKey.uid) ?: return null
+        val json = Encryption.decryptDataToString(encryptedUserPrefs, loginWithKey.base64Key) ?: return null // maybe throw an exception instead of returning null?
         return jsonToObject(json)
     }
 
     /**
      * Create new entry for user. Removes old data for that user.
      */
-    private fun createNewDataForUser(loginWithKey: LoginWithKey) =
+    fun createNewDataForUser(loginWithKey: LoginWithKey) =
         saveDataForUSer(loginWithKey, PreferencesData.DEFAULT)
 
     class Session(private val loginWithKey: LoginWithKey){
