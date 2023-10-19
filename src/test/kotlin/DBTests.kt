@@ -95,16 +95,23 @@ class DBTests {
             defaultFunction = PreferencesData.CAPTAIN
         )
 
-        println("DEBUG: $loginData")
         val session = UserPrefsRepository.Session(loginData)
-        assertNull(session.getPreferencesData()) // no data present should give null
+
+        // freshly created user should get DEFAULT
+        assertEquals(PreferencesData.DEFAULT, session.getPreferencesData())
+
+        // Saves default data with no errors
         session.savePreferencesData(preferences1)
         assertEquals(preferences1, session.getPreferencesData())
+
+        // overwrites data with different data
         session.savePreferencesData(preferences2)
         assertEquals(preferences2, session.getPreferencesData())
 
         val newLoginData = loginData.copy(base64Key = Encryption.generateBase64Key())
         val newSession = UserPrefsRepository.Session(newLoginData)
+
+        // wrong login data should give null
         assertNull(newSession.getPreferencesData())
     }
 

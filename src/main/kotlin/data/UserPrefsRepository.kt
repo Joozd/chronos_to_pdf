@@ -55,7 +55,7 @@ object UserPrefsRepository {
     }
 
     /**
-     * Get PreferencesData for user. Null if user not found or key incorrect.
+     * Get PreferencesData for user. [PreferencesData.DEFAULT] if user not found or key incorrect.
      */
     private fun getAndDecryptDataForUser(loginWithKey: LoginWithKey): PreferencesData? {
         val encryptedUserPrefs = getEncryptedDataForUser(loginWithKey.uid) ?: return null
