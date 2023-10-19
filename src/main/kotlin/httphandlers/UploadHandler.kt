@@ -7,7 +7,6 @@ import kotlinx.coroutines.launch
 import nl.joozd.joozdlogimporter.JoozdlogImporter
 import nl.joozd.joozdlogimporter.SupportedMimeTypes
 import nl.joozd.pdflogbookbuilder.PdfLogbookBuilder
-import nl.joozd.serializing.castedToByteArray
 import pdf.Logbook
 import utils.extensions.ioScope
 import utils.extensions.prepareForLogbook
@@ -42,9 +41,11 @@ class UploadHandler: SessionHandler() {
         ioScope?.launch {
             logger.info("Starting logbook creation")
             // Build logbook content and put it in a ByteArray
-            val logbookContentBytes = ByteArrayOutputStream().apply {
-                PdfLogbookBuilder(flights).buildToOutputStream(this)
-            }.toByteArray()
+            val logbookContentBytes =
+                if (flights.isEmpty()) ByteArray(0)
+                else ByteArrayOutputStream().apply {
+                    PdfLogbookBuilder(flights).buildToOutputStream(this)
+                }.toByteArray()
 
             // Logbook combines the logbookContentBytes with the cover pages from Resources.
             sessionData.downloadableFile = Logbook(logbookContentBytes).build()
