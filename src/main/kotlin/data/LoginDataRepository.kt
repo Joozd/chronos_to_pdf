@@ -62,9 +62,11 @@ object LoginDataRepository {
         val base64key = base64Encoder().encodeToString(key)
 
         insertUser(LoginData(uid, salt, hash))
-        FlightsDataRepository.createNewDataForUser(LoginWithKey(uid, base64key)) // using base64key, so we can just use the same function in FlightsDataRepository
+        val login = LoginWithKey(uid, base64key)
+        FlightsDataRepository.createNewDataForUser(login) // using base64key, so we can just use the same function in FlightsDataRepository
+        UserPrefsRepository.createNewDataForUser(login)
 
-        return LoginWithKey(uid, base64key)
+        return login
     }
 
     /**

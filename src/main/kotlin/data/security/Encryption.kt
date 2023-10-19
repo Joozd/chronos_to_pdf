@@ -81,10 +81,12 @@ object Encryption {
         }
         catch(badKey: AEADBadTagException){
             logger.warn("AEADBadTagException: Bad key used")
+            logger.warn(badKey.stackTraceToString())
             return null
         }
         catch (bpe: BadPaddingException){
             logger.warn("BadPaddingException: Bad key used / ${bpe.stackTraceToString()}")
+            logger.warn(bpe.stackTraceToString())
             return null
         }
 

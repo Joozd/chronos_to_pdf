@@ -1,6 +1,7 @@
 package data
 
 import utils.jsonToObject
+import java.io.InputStream
 
 class R {
     companion object {
@@ -18,5 +19,8 @@ class R {
             val jsonString = textFile(fileName) ?: return null
             return jsonToObject(jsonString)
         }
+
+        fun inputStream(fileName: String): InputStream? =
+            Config::class.java.classLoader.getResourceAsStream(fileName)
     }
 }

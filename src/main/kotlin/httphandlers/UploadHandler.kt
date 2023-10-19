@@ -3,9 +3,13 @@ package httphandlers
 import data.FlightsDataRepository
 import data.SessionData
 import io.javalin.http.Context
+import kotlinx.coroutines.launch
 import nl.joozd.joozdlogimporter.JoozdlogImporter
 import nl.joozd.joozdlogimporter.SupportedMimeTypes
 import nl.joozd.pdflogbookbuilder.PdfLogbookBuilder
+import nl.joozd.serializing.castedToByteArray
+import pdf.Logbook
+import utils.extensions.ioScope
 import utils.extensions.prepareForLogbook
 import java.io.ByteArrayOutputStream
 
@@ -33,13 +37,22 @@ class UploadHandler: SessionHandler() {
         }
         val flights = session.addFlightsFromFiles(importers, sessionData.preferences).prepareForLogbook(sessionData.preferences)
 
-        // this part can probably be done async as nothing from the session is needed anymore?
-        // The sessiomData object is not part of the session so should stay available.
-        val outputStream = ByteArrayOutputStream()
+        // this part can be done async as nothing from the session is needed anymore?
+        // The sessionData object is not part of the session so should stay available.
+        ioScope?.launch {
+            logger.info("Starting logbook creation")
+            // Build logbook content and put it in a ByteArray
+            val logbookContentBytes = ByteArrayOutputStream().apply {
+                PdfLogbookBuilder(flights).buildToOutputStream(this)
+            }.toByteArray()
 
-        PdfLogbookBuilder(flights).buildToOutputStream(outputStream)
-        sessionData.downloadableFile = outputStream.toByteArray()
-        sessionData.downloadReady = true
+            // Logbook combines the logbookContentBytes with the cover pages from Resources.
+            sessionData.downloadableFile = Logbook(logbookContentBytes).build()
+
+            // signal that the logbook is ready
+            sessionData.downloadReady = true
+            logger.info("Logbook created")
+        }
 
         redirect("/wait.html")
     }
