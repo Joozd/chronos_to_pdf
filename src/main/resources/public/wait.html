@@ -3,9 +3,47 @@
 <head>
     <meta charset="UTF-8">
     <title>File Processing</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        body {
+            /* Overriding body style for this specific page */
+            justify-content: normal;
+            align-items: normal;
+        }
+
+        #status-container {
+            background-color: #ffffff;
+            padding: 30px 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            max-width: 450px;
+            width: 90%; /* Ensuring mobile responsiveness */
+            text-align: center;
+            margin: auto; /* Center the container */
+            margin-top: 10vh; /* Positioning it a bit from the top */
+        }
+
+        #status-text {
+            margin-bottom: 15px;
+            font-size: 16px;
+            line-height: 1.5;
+        }
+
+        @keyframes blink {
+            50% {
+                opacity: 0.5;
+            }
+        }
+
+        .blinking {
+            animation: blink 1s linear infinite;
+        }
+    </style>
 </head>
 <body>
-<p id="status-text">Please wait while we process your file...</p>
+<div id="status-container">
+    <p id="status-text" class="blinking">Please wait while we process your file...</p>
+</div>
 
 <script>
     let pollingInterval;
@@ -22,7 +60,7 @@
             .then(data => {
                 if (data.done) {
                     clearInterval(pollingInterval);  // stop the polling
-                    window.location.href = "/download";
+                    window.location.href = "/download_ready.html";
                 } else {
                     // Update the user about the status
                     document.getElementById("status-text").textContent = data.message || "Processing...";
@@ -32,6 +70,7 @@
                 // Log the error and potentially stop polling
                 console.error("An error occurred:", error);
                 document.getElementById("status-text").textContent = "An error occurred. Please try again.";
+                document.getElementById("status-text").classList.remove("blinking");
             });
     }
 

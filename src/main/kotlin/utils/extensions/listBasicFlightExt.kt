@@ -66,3 +66,10 @@ private fun BasicFlight.setMultiCrewTimes(preferencesData: PreferencesData): Bas
         nightTime = newNightTime
     )
 }
+
+fun List<BasicFlight>.toCsvFile(): ByteArray =
+    (listOf(BasicFlight.CSV_IDENTIFIER_STRING) +
+    map{it.toCsv()})
+        .joinToString("\n")
+        .toByteArray(Charsets.UTF_8)
+

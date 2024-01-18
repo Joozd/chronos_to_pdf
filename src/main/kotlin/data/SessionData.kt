@@ -30,5 +30,6 @@ data class SessionData(
      */
     var preferences: PreferencesData = PreferencesData.DEFAULT
 ){
-    var downloadableFile: ByteArray? = null
+    var downloadablePdfFile: ByteArray? = null
+    var downloadableCsvFile: ByteArray? = null
 }

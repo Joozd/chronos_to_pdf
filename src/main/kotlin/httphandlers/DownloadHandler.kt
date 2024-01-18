@@ -1,6 +1,8 @@
 package httphandlers
 
 import data.SessionData
+import global.MimeTypes
+import global.Values
 import io.javalin.http.Context
 
 /**
@@ -12,14 +14,31 @@ class DownloadHandler: SessionHandler() {
             status(400).result("Bad request, session not ready. Sessiondata: $sessionData")
             return
         }
-        val inputStream = sessionData.downloadableFile?.inputStream()
+        val wantedType = queryParam(Values.DOWNLOAD_TYPE)
+        // Doing this as a when statement, so I can easily add other file types. Default is PDF.
+        val inputStream = when (wantedType){
+            Values.CSV -> sessionData.downloadableCsvFile?.inputStream()
+            else -> sessionData.downloadablePdfFile?.inputStream()
+
+        }
         if(inputStream == null){
             logger.info("inputStream = null from $sessionData")
             status(500)
             return
         }
+
+        val contentMimeType = when(wantedType){
+            Values.CSV -> MimeTypes.CSV
+            else -> MimeTypes.PDF // default, PDF
+        }
+
+        val fileName = when(wantedType){
+            Values.CSV -> "logbook.csv"
+            else -> "logbook.pdf" // default is pdf
+        }
         result(inputStream)
-            .contentType("application/pdf") // "application/pdf"
-            .header("Content-Disposition", "attachment; filename=TEST_FILE.pdf")
+            .contentType(contentMimeType) // "application/pdf"
+            .header("Content-Disposition", "attachment; filename=$fileName")
     }
+
 }

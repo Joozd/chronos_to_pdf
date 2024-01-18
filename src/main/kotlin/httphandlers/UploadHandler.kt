@@ -3,13 +3,16 @@ package httphandlers
 import data.FlightsDataRepository
 import data.SessionData
 import io.javalin.http.Context
+import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 import nl.joozd.joozdlogimporter.JoozdlogImporter
 import nl.joozd.joozdlogimporter.SupportedMimeTypes
 import nl.joozd.pdflogbookbuilder.PdfLogbookBuilder
 import pdf.Logbook
+import utils.extensions.defaultScope
 import utils.extensions.ioScope
 import utils.extensions.prepareForLogbook
+import utils.extensions.toCsvFile
 import java.io.ByteArrayOutputStream
 
 class UploadHandler: SessionHandler() {
@@ -48,11 +51,20 @@ class UploadHandler: SessionHandler() {
                 }.toByteArray()
 
             // Logbook combines the logbookContentBytes with the cover pages from Resources.
-            sessionData.downloadableFile = Logbook(logbookContentBytes).build()
+            val pdfTask = async{
+                sessionData.downloadablePdfFile = Logbook(logbookContentBytes).build()
+                logger.info("PDF Logbook created")
+            }
+            val csvTask = async {
+                sessionData.downloadableCsvFile = flights.toCsvFile()
+                logger.info("CSV Logbook created")
+            }
+            pdfTask.await()
+            csvTask.await()
 
             // signal that the logbook is ready
             sessionData.downloadReady = true
-            logger.info("Logbook created")
+            logger.info("downloadReady = true")
         }
 
         redirect("/wait.html")
