@@ -9,7 +9,6 @@ import nl.joozd.joozdlogimporter.JoozdlogImporter
 import nl.joozd.joozdlogimporter.SupportedMimeTypes
 import nl.joozd.pdflogbookbuilder.PdfLogbookBuilder
 import pdf.Logbook
-import utils.extensions.defaultScope
 import utils.extensions.ioScope
 import utils.extensions.prepareForLogbook
 import utils.extensions.toCsvFile
