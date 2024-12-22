@@ -1,5 +1,5 @@
 plugins {
-    id 'org.jetbrains.kotlin.jvm' version '1.9.22'
+    id 'org.jetbrains.kotlin.jvm' version '2.0.21'
     id 'application'
 }
 
@@ -8,16 +8,29 @@ version = '1.0-SNAPSHOT'
 
 repositories {
     mavenCentral()
+    maven {
+        url = uri("https://joozd.nl/nexus/repository/maven-releases/")
+    }
 }
 
 dependencies {
+    //TODO phase this out, joozdlogCommon is deprecated
     implementation files("C:\\Users\\joozd\\StudioProjects\\LogbookApp\\joozdlogCommon\\build\\libs\\joozdlogCommon.jar")
+
+    //TODO phase this out, joozdserializing is deprecated
     implementation files("C:\\Users\\joozd\\IdeaProjects\\libs\\joozdserializing-jvm-0.1.1.jar")
+
+    //TODO phase this out, JoozdlogImport is deprecated
     implementation files("C:\\Users\\joozd\\StudioProjects\\LogbookApp\\JoozdlogImport\\build\\libs\\JoozdlogImport.jar")
     implementation files("C:\\Users\\joozd\\StudioProjects\\LogbookApp\\PdfLogbookBuilder\\build\\libs\\PdfLogbookBuilder.jar")
-    implementation files("C:\\Users\\joozd\\StudioProjects\\LogbookApp\\JoozdlogImport\\build\\libs\\JoozdlogImport.jar")
 
     testImplementation 'org.jetbrains.kotlin:kotlin-test'
+
+    //rosterparser:
+    implementation("nl.joozd.rosterparser:rosterparser:0.1.6-beta")
+
+    // YALA interfaces
+    implementation("nl.joozd.yalainterfaces:yalainterfaces:0.3-DEV")
 
     // Kotlin Coroutines
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.3"

@@ -68,8 +68,8 @@ private fun BasicFlight.setMultiCrewTimes(preferencesData: PreferencesData): Bas
 }
 
 fun List<BasicFlight>.toCsvFile(): ByteArray =
-    (listOf(BasicFlight.CSV_IDENTIFIER_STRING) +
-    map{it.toCsv()})
+    (listOf(BasicFlight.CSV_EXPORT_STRING) +
+    map{it.toCsvForExport()})
         .joinToString("\n")
         .toByteArray(Charsets.UTF_8)
 
